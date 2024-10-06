@@ -1,5 +1,6 @@
 const Map<String, String> en_us = {
   // Title
+  "titleApp": "ConnectTic",
   "titleHelp": "Help/Rules",
   "titleAbout": "About",
   // Button

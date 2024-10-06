@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("TODO: Title"),
+        title: Text(getLang('titleApp')),
       ),
       // Aspect controls the aspect ratio.
       body: Aspect(
@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
                   minimumSize: Size.fromHeight(40),
                 ),
                 onPressed: () {},
-                child: Marked(getLang("btnStartGame")),
+                child: Marked(getLang('btnStartGame')),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 onPressed: () =>
                     Navigator.push(context, genRoute(HelpScreen())),
-                child: Marked(getLang("btnHelp")),
+                child: Marked(getLang('btnHelp')),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 onPressed: () =>
                     Navigator.push(context, genRoute(AboutScreen())),
-                child: Marked(getLang("btnAbout")),
+                child: Marked(getLang('btnAbout')),
               ),
             ],
           ),
