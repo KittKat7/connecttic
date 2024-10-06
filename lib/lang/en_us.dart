@@ -4,12 +4,19 @@ const Map<String, String> en_us = {
   "titleModeSelect": "Select Gamemode",
   "titleHelp": "Help/Rules",
   "titleAbout": "About",
+  "titleSetupGame": "Setup Game",
   // Button
   "btnStartGame": "Start Game",
   "btnHelp": "Help/Rules",
   "btnAbout": "About",
   "btnLocalPlay": "Local Play",
   "btnOnlinePlay": "Online Play (NOT IMPLEMENTED)",
+  "btnCancel": "Cancel",
+  "btnConfirm": "Confirm",
+  // Prompt
+  "pmtPlayer1": "Player 1",
+  "pmtPlayer2": "Player 2",
+  "pmtAI": "A.I.",
   // Text
   "txtHelp": """
 ## How to play

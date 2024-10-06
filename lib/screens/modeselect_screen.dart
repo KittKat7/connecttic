@@ -1,3 +1,4 @@
+import 'package:connecttic/widgets/localplaypopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
@@ -23,7 +24,9 @@ class ModeSelectScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size.fromHeight(40),
                 ),
-                onPressed: () {},
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) => LocalPlayPopup()),
                 child: Marked(getLang('btnLocalPlay')),
               ),
               const SizedBox(height: 10),
