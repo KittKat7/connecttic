@@ -1,7 +1,9 @@
-import 'package:connecttic/screens/about_screen.dart';
-import 'package:connecttic/screens/help_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
+
+import 'modeselect_screen.dart';
+import 'about_screen.dart';
+import 'help_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,6 +14,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        centerTitle: true,
         title: Text(getLang('titleApp')),
       ),
       // Aspect controls the aspect ratio.
@@ -24,7 +27,8 @@ class HomeScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size.fromHeight(40),
                 ),
-                onPressed: () {},
+                onPressed: () =>
+                    Navigator.push(context, genRoute(ModeSelectScreen())),
                 child: Marked(getLang('btnStartGame')),
               ),
               const SizedBox(height: 10),

@@ -10,6 +10,7 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        centerTitle: true,
         title: Text(getLang('titleAbout')),
       ),
       // Aspect controls the aspect ratio.

@@ -10,6 +10,7 @@ class HelpScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        centerTitle: true,
         title: Text(getLang('titleHelp')),
       ),
       // Aspect controls the aspect ratio.
