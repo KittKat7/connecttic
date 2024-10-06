@@ -1,12 +1,15 @@
 const Map<String, String> en_us = {
   // Title
   "titleApp": "ConnectTic",
+  "titleModeSelect": "Select Gamemode",
   "titleHelp": "Help/Rules",
   "titleAbout": "About",
   // Button
   "btnStartGame": "Start Game",
   "btnHelp": "Help/Rules",
   "btnAbout": "About",
+  "btnLocalPlay": "Local Play",
+  "btnOnlinePlay": "Online Play (NOT IMPLEMENTED)",
   // Text
   "txtHelp": """
 ## How to play
