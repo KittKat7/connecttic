@@ -4,11 +4,15 @@ class Player {
     return _username;
   }
 
+  final String _marker;
+  String get marker => _marker;
+
   int lastx;
   int lasty;
 
-  Player(String username)
+  Player(String username, String marker)
       : _username = username,
+        _marker = marker,
         lastx = -1,
         lasty = -1 {
     if (!Player._isValidUsername(username)) throw Exception("Invalid username");

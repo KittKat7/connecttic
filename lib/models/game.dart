@@ -19,8 +19,23 @@ class Game {
 
   /// Cycles [_currentPlyer] to be the next player in the list.
   void iterateCurrentPlayer() {
-    int index = players.indexOf(_currentPlayer);
+    int index = players.indexOf(_currentPlayer) + 1;
     if (index >= players.length) index = 0;
     _currentPlayer = players[index];
+  }
+
+  void play(int x, int y) {
+    if (board.get(x, y).isNotEmpty) return;
+    if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
+      board.highlight(_currentPlayer.lastx, _currentPlayer.lasty, true);
+      board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, true);
+    }
+    board.set(x, y, _currentPlayer.marker.toUpperCase());
+    _currentPlayer.lastx = x;
+    _currentPlayer.lasty = y;
+    iterateCurrentPlayer();
+    if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
+      board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty);
+    }
   }
 }

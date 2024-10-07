@@ -15,7 +15,15 @@ class Board {
   Board([int w = 7, int h = 6])
       : width = w,
         height = h,
-        _board = List.filled(w, List.filled(h, ""));
+        _board = [] {
+    for (int i = 0; i < width; i++) {
+      List<String> tmp = [];
+      for (int j = 0; j < height; j++) {
+        tmp.add("");
+      }
+      _board.add(tmp);
+    }
+  }
 
   /// get(x,y) returns the string at the given x (width) and y (height) position.
   String get(int x, int y) {
@@ -41,14 +49,31 @@ class Board {
   /// around that location.
   void setLastPlay(int x, int y, [bool unset = false]) {
     // For every tile around the given tile, if that tile is empty, set it to be a "-"
-    for (int i in [x - 1, x + 1]) {
+    for (int i = x - 1; i <= x + 1; i++) {
       if (i < 0 || i >= width) continue;
-
-      for (int j in [y - 1, y + 1]) {
+      for (int j = y - 1; j <= y + 1; j++) {
         if (j < 0 || j >= height) continue;
 
         !unset ? _block(i, j) : _unblock(i, j);
       }
+    }
+  }
+
+  /// Capitalizes the item at x y.
+  void highlight(int x, int y, [undo = false]) {
+    undo
+        ? set(x, y, get(x, y).toLowerCase())
+        : set(x, y, get(x, y).toUpperCase());
+  }
+
+  /// Used for debugging, prints the game board into console.
+  void printBoard() {
+    for (int i = 0; i < height; i++) {
+      String str = "| ";
+      for (int j = 0; j < width; j++) {
+        str += '${get(j, i)} | ';
+      }
+      print(str);
     }
   }
 }

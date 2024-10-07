@@ -1,3 +1,7 @@
+import 'package:connecttic/models/board.dart';
+import 'package:connecttic/models/game.dart';
+import 'package:connecttic/models/player.dart';
+import 'package:connecttic/screens/game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
@@ -84,7 +88,17 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
         TextButton(
             onPressed: () {
               Navigator.pop(context);
-              //TODO: Remove print statements
+              Navigator.push(
+                  context,
+                  genRoute(GameScreen(
+                    game: Game(
+                      Board(),
+                      [
+                        Player(username[0], "X"),
+                        Player(username[1], "O"),
+                      ],
+                    ),
+                  )));
               print(username);
               print(ai);
             },
