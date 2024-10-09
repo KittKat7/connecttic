@@ -32,10 +32,8 @@ class _GameScreenState extends State<GameScreen> {
               Text("TODO TIME"),
               GameBoard(
                   board: widget.game.board,
-                  tapCallBack: (a, b) {
-                    setState(() => widget.game.play(a, b));
-                    widget.game.board.printBoard();
-                  }),
+                  tapCallBack: (a, b) =>
+                      setState(() => widget.game.play(a, b))),
               Row(
                 children: [
                   Text(widget.game.players[0].username),

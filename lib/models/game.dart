@@ -1,5 +1,6 @@
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/player.dart';
+import 'package:connecttic/models/tile.dart';
 
 /// Game class manages the game state/ players, current turn, and win status.
 class Game {
@@ -25,17 +26,18 @@ class Game {
   }
 
   void play(int x, int y) {
-    if (board.get(x, y).isNotEmpty) return;
+    if (board.get(x, y) is! EmptyTile) return;
     if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
-      board.highlight(_currentPlayer.lastx, _currentPlayer.lasty, true);
-      board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, true);
+      board.setHighlight(_currentPlayer.lastx, _currentPlayer.lasty, false);
+      board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, false);
     }
-    board.set(x, y, _currentPlayer.marker.toUpperCase());
+    board.set(x, y, _currentPlayer.tile.clone);
+    board.setHighlight(x, y, true);
     _currentPlayer.lastx = x;
     _currentPlayer.lasty = y;
     iterateCurrentPlayer();
     if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
-      board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty);
+      board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, true);
     }
   }
 }

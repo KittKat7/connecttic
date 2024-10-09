@@ -1,18 +1,21 @@
+import 'package:connecttic/models/tile.dart';
+import 'package:flutter/material.dart';
+
 class Player {
   final String _username;
   String get username {
     return _username;
   }
 
-  final String _marker;
-  String get marker => _marker;
+  final PlayerTile _tile;
+  PlayerTile get tile => _tile;
 
   int lastx;
   int lasty;
 
-  Player(String username, String marker)
+  Player(String username, Widget marker)
       : _username = username,
-        _marker = marker,
+        _tile = PlayerTile(id: username, marker: marker),
         lastx = -1,
         lasty = -1 {
     if (!Player._isValidUsername(username)) throw Exception("Invalid username");
