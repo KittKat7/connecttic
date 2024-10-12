@@ -96,16 +96,20 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
                       [
                         Player(
                           username[0],
-                          const Image(
-                              image:
-                                  AssetImage('assets/coins/coin_basic_x.png')),
+                          Image.asset(
+                            'assets/coins/coin_pixel.png',
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.none,
+                          ),
                           Colors.red,
                         ),
                         Player(
                           username[1],
-                          const Image(
-                              image:
-                                  AssetImage('assets/coins/coin_basic_o.png')),
+                          Image.asset(
+                            'assets/coins/coin_basic_o.png',
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.none,
+                          ),
                           Colors.blue,
                         ),
                       ],
