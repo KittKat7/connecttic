@@ -13,9 +13,9 @@ class Player {
   int lastx;
   int lasty;
 
-  Player(String username, Widget marker)
+  Player(String username, Widget marker, [Color color = Colors.grey])
       : _username = username,
-        _tile = PlayerTile(id: username, marker: marker),
+        _tile = PlayerTile(id: username, marker: marker, color: color),
         lastx = -1,
         lasty = -1 {
     if (!Player._isValidUsername(username)) throw Exception("Invalid username");

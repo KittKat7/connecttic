@@ -94,8 +94,20 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
                     game: Game(
                       Board(),
                       [
-                        Player(username[0], const Icon(Icons.clear_rounded)),
-                        Player(username[1], const Icon(Icons.check_rounded)),
+                        Player(
+                          username[0],
+                          const Image(
+                              image:
+                                  AssetImage('assets/coins/basic_coin_x.png')),
+                          Colors.red,
+                        ),
+                        Player(
+                          username[1],
+                          const Image(
+                              image:
+                                  AssetImage('assets/coins/basic_coin_o.png')),
+                          Colors.blue,
+                        ),
                       ],
                     ),
                   )));

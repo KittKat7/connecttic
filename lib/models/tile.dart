@@ -23,14 +23,20 @@ class BlockerTile extends Tile {
 class PlayerTile extends Tile {
   final String _id;
   final Widget _marker;
-  PlayerTile({required String id, required Widget marker})
+  final Color _color;
+  PlayerTile({required String id, required Widget marker, required Color color})
       : _id = id,
-        _marker = marker;
+        _marker = ColorFiltered(
+          colorFilter: ColorFilter.mode(color, BlendMode.modulate),
+          child: marker,
+        ),
+        _color = color;
   @override
   String get id => _id;
   @override
-  Widget get marker =>
-      highlight ? Transform.scale(scale: 1.5, child: _marker) : _marker;
+  Widget get marker => highlight
+      ? Transform.scale(scale: 1, child: _marker)
+      : Transform.scale(scale: 0.75, child: _marker);
 
-  PlayerTile get clone => PlayerTile(id: _id, marker: _marker);
+  PlayerTile get clone => PlayerTile(id: _id, marker: _marker, color: _color);
 }
