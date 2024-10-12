@@ -108,6 +108,17 @@ class Board {
     return false;
   }
 
+  /// Returns true if there are any empty tiles on the board, otherwise, false if the board is full
+  /// of player tiles or blocker tiles.
+  bool hasOpenTile() {
+    for (int x = 0; x < _board.length; x++) {
+      for (int y = 0; y < _board[x].length; y++) {
+        if (_board[x][y] is EmptyTile) return true;
+      }
+    }
+    return false;
+  }
+
   /// Checks and returns true if a player has four pieces in a row.
   bool _checkWinRow(int x, int y) {
     for (int i = 0; i < 4; i++) {

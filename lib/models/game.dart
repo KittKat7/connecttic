@@ -29,35 +29,42 @@ class Game {
   /// Manages the functions needed to be run when a player plays. This method runs when a player
   /// tries to play.
   void play(int x, int y) {
-    /// If the selected tile is NOT an EmptyTile, its either a blocker or a player, return and don't
-    /// complete the play.
+    // If the selected tile is NOT an EmptyTile, its either a blocker or a player, return and don't
+    // complete the play.
     if (isEnded || board.get(x, y) is! EmptyTile) return;
 
-    /// If the current players last x and y are not negative (they have played before) then un
-    /// highlight their last play and unset their last play.
+    // If the current players last x and y are not negative (they have played before) then un
+    // highlight their last play and unset their last play.
     if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
       board.setHighlight(_currentPlayer.lastx, _currentPlayer.lasty, false);
       board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, false);
     }
 
-    /// Set the tile at the play location to be a copy of the player's tile.
+    // Set the tile at the play location to be a copy of the player's tile.
     board.set(x, y, _currentPlayer.tile.clone);
 
-    /// If the board finds a win condition, mark the game as ended and skip the rest of the play
-    /// functions.
+    // If the board finds a win condition, mark the game as ended and skip the rest of the play
+    // functions.
     if (board.gameIsWon()) {
       isEnded = true;
       return;
     }
 
-    /// Set the play to be highlighted, update the last x and y, and iterate the current player.
+    // Check if their are playable tiles left on the board. If there are no more playable tiles, the
+    // game has ended in a draw.
+    if (!board.hasOpenTile()) {
+      isEnded = true;
+      return;
+    }
+
+    // Set the play to be highlighted, update the last x and y, and iterate the current player.
     board.setHighlight(x, y, true);
     _currentPlayer.lastx = x;
     _currentPlayer.lasty = y;
     iterateCurrentPlayer();
 
-    /// If the new current player has played previously, mark their last play by putting blockers
-    /// around it.
+    // If the new current player has played previously, mark their last play by putting blockers
+    // around it.
     if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
       board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, true);
     }
