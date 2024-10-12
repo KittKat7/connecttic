@@ -65,4 +65,82 @@ class Board {
   void setHighlight(int x, int y, status) {
     get(x, y).highlight = status;
   }
+
+  /// Checks whether a player has won the game. If so, return true, otherwise, return false. A
+  /// player can win by getting four tiles in a row, column, down diagonal, or up diagonal.
+  /// If a win condition is found, return true, and highlight the four in a row winning tiles.
+  bool gameIsWon() {
+    // For every tile in the board, (for every x: for every y: etc...).
+    for (int x = 0; x < _board.length; x++) {
+      for (int y = 0; y < _board[x].length; y++) {
+        // If the tile at x y is empty, not a player tile, continue past this tile.
+        if (_board[x][y].id.isEmpty) continue;
+        // Check if the player has four tiles in a row.
+        if (_checkWinRow(x, y)) {
+          for (int i = 0; i < 4; i++) {
+            setHighlight(x + i, y, true);
+          }
+          return true;
+        }
+        // Check if the player has four tiles in a down diagonal.
+        else if (_checkWinDiag(x, y)) {
+          for (int i = 0; i < 4; i++) {
+            setHighlight(x + i, y + i, true);
+          }
+          return true;
+        }
+        // Check if the player has four tiles in an up diagonal.
+        else if (_checkWinDiagR(x, y)) {
+          for (int i = 0; i < 4; i++) {
+            setHighlight(x + i, y - i, true);
+          }
+          return true;
+        }
+        // Check if the player has four tiles in a column.
+        else if (_checkWinCol(x, y)) {
+          for (int i = 0; i < 4; i++) {
+            setHighlight(x, y + i, true);
+          }
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /// Checks and returns true if a player has four pieces in a row.
+  bool _checkWinRow(int x, int y) {
+    for (int i = 0; i < 4; i++) {
+      if (x + i >= _board.length) return false;
+      if (_board[x][y].id != _board[x + i][y].id) return false;
+    }
+    return true;
+  }
+
+  /// Checks and returns true if a player has four pieces in a down diagonal (l to r).
+  bool _checkWinDiag(int x, int y) {
+    for (int i = 0; i < 4; i++) {
+      if (x + i >= _board.length || y + i >= _board[x + i].length) return false;
+      if (_board[x][y].id != _board[x + i][y + i].id) return false;
+    }
+    return true;
+  }
+
+  /// Checks and returns true if a player has four pieces in a up diagonal (l to r).
+  bool _checkWinDiagR(int x, int y) {
+    for (int i = 0; i < 4; i++) {
+      if (x + i >= _board.length || y - i <= 0) return false;
+      if (_board[x][y].id != _board[x + i][y - i].id) return false;
+    }
+    return true;
+  }
+
+  /// Checks and returns true if a player has four pieces in a column.
+  bool _checkWinCol(int x, int y) {
+    for (int i = 0; i < 4; i++) {
+      if (y + i >= _board[x].length) return false;
+      if (_board[x][y].id != _board[x][y + i].id) return false;
+    }
+    return true;
+  }
 }
