@@ -17,6 +17,10 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
+    widget.game.players[0].tile.highlight =
+        widget.game.getCurrentPlayer() == widget.game.players[0];
+    widget.game.players[1].tile.highlight =
+        widget.game.getCurrentPlayer() == widget.game.players[1];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -36,9 +40,11 @@ class _GameScreenState extends State<GameScreen> {
                       setState(() => widget.game.play(a, b))),
               Row(
                 children: [
-                  Text(widget.game.players[0].username),
+                  Expanded(child: Text(widget.game.players[0].username)),
+                  Expanded(child: widget.game.players[0].tile.marker),
                   Expanded(child: SizedBox()),
-                  Text(widget.game.players[1].username),
+                  Expanded(child: widget.game.players[1].tile.marker),
+                  Expanded(child: Text(widget.game.players[1].username)),
                 ],
               )
             ],
