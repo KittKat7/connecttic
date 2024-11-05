@@ -106,7 +106,7 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
                         Player(
                           username[1],
                           Image.asset(
-                            'assets/coins/coin_basic_o.png',
+                            'assets/coins/coin_pixel.png',
                             fit: BoxFit.cover,
                             filterQuality: FilterQuality.none,
                           ),
@@ -115,8 +115,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
                       ],
                     ),
                   )));
-              print(username);
-              print(ai);
             },
             child: Text(getLang('btnConfirm'))),
       ],
