@@ -1,21 +1,34 @@
-import 'package:connecttic/models/tile.dart';
+import 'package:connecttic/models/game_object.dart';
 import 'package:flutter/material.dart';
 
-class Player {
+class Player extends GameObject {
   final String _username;
   String get username {
     return _username;
   }
 
-  final PlayerTile _tile;
-  PlayerTile get tile => _tile;
+  @override
+  Widget getTile() {
+    return Transform.scale(scale: 0.75, child: _tile);
+  }
+
+  @override
+  Widget getBigTile() {
+    return _tile;
+  }
 
   int lastx;
   int lasty;
+  final Widget _tile;
 
-  Player(String username, Widget marker, [Color color = Colors.grey])
+  Player(String username, Widget tile, [Color color = Colors.grey])
       : _username = username,
-        _tile = PlayerTile(id: username, marker: marker, color: color),
+        _tile = color == Colors.transparent
+            ? tile
+            : ColorFiltered(
+                colorFilter: ColorFilter.mode(color, BlendMode.modulate),
+                child: tile,
+              ),
         lastx = -1,
         lasty = -1 {
     if (!Player._isValidUsername(username)) throw Exception("Invalid username");

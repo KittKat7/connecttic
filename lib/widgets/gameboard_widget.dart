@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
 import '../models/board.dart';
-import '../models/tile.dart';
 
 /// This widget displays the game board.
 class GameBoard extends StatelessWidget {
@@ -17,7 +16,7 @@ class GameBoard extends StatelessWidget {
       for (int w = 0; w < board.width; w++) {
         boardWidgetList.add(
           _BoardTile(
-            tile: board.get(w, h),
+            tile: board.getTile(w, h),
             onTap: () => tapCallBack(w, h),
           ),
         );
@@ -38,7 +37,7 @@ class GameBoard extends StatelessWidget {
 }
 
 class _BoardTile extends StatelessWidget {
-  final Tile tile;
+  final Widget tile;
   final void Function() onTap;
   const _BoardTile({required this.tile, required this.onTap});
 
@@ -49,7 +48,7 @@ class _BoardTile extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: colorScheme(context).primary),
         ),
-        child: tile.marker,
+        child: tile,
       ),
       onTapInside: (event) => onTap(),
     );

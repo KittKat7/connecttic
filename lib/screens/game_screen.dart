@@ -17,10 +17,17 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
-    widget.game.players[0].tile.highlight =
-        widget.game.getCurrentPlayer() == widget.game.players[0];
-    widget.game.players[1].tile.highlight =
-        widget.game.getCurrentPlayer() == widget.game.players[1];
+    Widget player0Tile = widget.game.players[0].getTile();
+    Widget player1Tile = widget.game.players[1].getTile();
+    if (widget.game.getCurrentPlayer() == widget.game.players[0]) {
+      player0Tile = widget.game.players[0].getBigTile();
+    } else {
+      player1Tile = widget.game.players[1].getBigTile();
+    }
+    // widget.game.players[0].tile.highlight =
+    // widget.game.getCurrentPlayer() == widget.game.players[0];
+    // widget.game.players[1].tile.highlight =
+    // widget.game.getCurrentPlayer() == widget.game.players[1];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -41,9 +48,9 @@ class _GameScreenState extends State<GameScreen> {
               Row(
                 children: [
                   Expanded(child: Text(widget.game.players[0].username)),
-                  Expanded(child: widget.game.players[0].tile.marker),
+                  Expanded(child: player0Tile),
                   Expanded(child: SizedBox()),
-                  Expanded(child: widget.game.players[1].tile.marker),
+                  Expanded(child: player1Tile),
                   Expanded(child: Text(widget.game.players[1].username)),
                 ],
               )
@@ -54,3 +61,8 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 }
+/*
+
+      ? Transform.scale(scale: 1, child: _marker)
+      : Transform.scale(scale: 0.75, child: _marker);
+      */

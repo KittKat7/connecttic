@@ -1,6 +1,5 @@
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/player.dart';
-import 'package:connecttic/models/tile.dart';
 
 /// Game class manages the game state/ players, current turn, and win status.
 class Game {
@@ -31,7 +30,7 @@ class Game {
   void play(int x, int y) {
     // If the selected tile is NOT an EmptyTile, its either a blocker or a player, return and don't
     // complete the play.
-    if (isEnded || board.get(x, y) is! EmptyTile) return;
+    if (isEnded || board.get(x, y) != null) return;
 
     // If the current players last x and y are not negative (they have played before) then un
     // highlight their last play and unset their last play.
@@ -41,7 +40,7 @@ class Game {
     }
 
     // Set the tile at the play location to be a copy of the player's tile.
-    board.set(x, y, _currentPlayer.tile.clone);
+    board.set(x, y, _currentPlayer);
 
     // If the board finds a win condition, mark the game as ended and skip the rest of the play
     // functions.
