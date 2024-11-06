@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/player.dart';
+import 'package:flutter/material.dart';
 
 /// Game class manages the game state/ players, current turn, and win status.
 class Game {
@@ -7,11 +10,31 @@ class Game {
   List<Player> players;
   bool isEnded = false;
 
+  Timer? _timer;
+  final ValueNotifier<int> timeNotifier;
+
   /// Tracks the current player.
   Player _currentPlayer;
 
   /// Constructor
-  Game(this.board, this.players) : _currentPlayer = players[0];
+  Game(this.board, this.players)
+      : _currentPlayer = players[0],
+        timeNotifier = ValueNotifier<int>(0) {
+    // Initiate the timer
+    _timer = Timer.periodic(const Duration(seconds: 1), (time) {
+      // If the game has ended, stop the timer and return
+      if (isEnded) {
+        _timer?.cancel();
+        return;
+      }
+      timeNotifier.value++;
+    });
+  }
+
+  void dispose() {
+    _timer?.cancel();
+    timeNotifier.dispose();
+  }
 
   /// Returns the current player (the player whose turn it is).
   Player getCurrentPlayer() {
