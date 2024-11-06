@@ -6,8 +6,13 @@ import 'package:flutter/material.dart';
 
 /// Game class manages the game state/ players, current turn, and win status.
 class Game {
+  /// The board which is used for this game.
   Board board;
+
+  /// The list of players in the game.
   List<Player> players;
+
+  /// Bool flag, true if the game has ended.
   bool isEnded = false;
 
   Timer? _timer;
@@ -24,21 +29,26 @@ class Game {
         timeNotifier = ValueNotifier<int>(0),
         onEndCallback = null {
     // Initiate the timer
-    _timer = Timer.periodic(const Duration(seconds: 1), (time) {
-      // If the game has ended, stop the timer and return
-      if (isEnded) {
-        _timer?.cancel();
-        return;
-      }
-      timeNotifier.value++;
-    });
+    _timer = Timer.periodic(const Duration(seconds: 1), _onTimeUpdate);
   }
 
+  /// The function to be run every second when the timer updates.
+  void _onTimeUpdate(time) {
+    // If the game has ended, stop the timer and return
+    if (isEnded) {
+      _timer?.cancel();
+      return;
+    }
+    timeNotifier.value++;
+  }
+
+  /// Dispose of the game, cancel the timer and dispose of the time notifier.
   void dispose() {
     _timer?.cancel();
     timeNotifier.dispose();
   }
 
+  /// Sets the callback function which is run when the game ends.
   void setOnEndCallback(void Function(String) funct) {
     onEndCallback = funct;
   }

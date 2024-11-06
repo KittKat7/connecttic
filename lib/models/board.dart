@@ -14,6 +14,8 @@ class Board {
 
   /// Board[w][h]
   final List<List<GameObject?>> _board;
+
+  /// Secondary board which tracks which tiles are highlighted
   List<List<bool>> _isHighlighted;
 
   /// Board constructor
@@ -22,6 +24,7 @@ class Board {
         height = h,
         _isHighlighted = [],
         _board = [] {
+    // Initiate [_board] with null
     for (int i = 0; i < width; i++) {
       List<GameObject?> tmp = [];
       for (int j = 0; j < height; j++) {
@@ -29,6 +32,7 @@ class Board {
       }
       _board.add(tmp);
     }
+    // Initiate [_isHighlighted] with false
     _isHighlighted =
         List.generate(width, (_) => List.generate(height, (_) => false));
   }
@@ -38,6 +42,7 @@ class Board {
     return _board[x][y];
   }
 
+  /// Returns the widget tile for tile game object at the given x, y
   Widget getTile(int x, int y) {
     if (get(x, y) == null) return const SizedBox();
     return _isHighlighted[x][y]

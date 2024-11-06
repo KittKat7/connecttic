@@ -20,6 +20,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
+    // When initing state, set the onCallBack function in the game to launch the end game popup.
     widget.game.setOnEndCallback(
       (winner) => showDialog(
           context: context,
@@ -31,9 +32,11 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /// Player 0 and 1 in the game.
     Player player0 = widget.game.players[0];
     Player player1 = widget.game.players[1];
 
+    /// The widget display for the player usernames.
     Widget player0Name = Text(
       player0.username,
       textScaler: const TextScaler.linear(_textScale),
@@ -42,14 +45,19 @@ class _GameScreenState extends State<GameScreen> {
       player1.username,
       textScaler: const TextScaler.linear(_textScale),
     );
+
+    /// Tiles/widgets for the players.
     Widget player0Tile = player0.getTile();
     Widget player1Tile = player1.getTile();
+    // If the player is the current player, use the big tile.
     if (widget.game.getCurrentPlayer() == widget.game.players[0]) {
       player0Tile = widget.game.players[0].getBigTile();
     } else {
       player1Tile = widget.game.players[1].getBigTile();
     }
 
+    /// Listens to the time on the game timer. When the time updates, return a new Text widget which
+    /// displays the updated time.
     var valueListenableBuilder = ValueListenableBuilder<int>(
         valueListenable: widget.game.timeNotifier,
         builder: (context, seconds, child) {
@@ -58,9 +66,13 @@ class _GameScreenState extends State<GameScreen> {
             textScaler: const TextScaler.linear(_textScale),
           );
         });
+
+    /// The widget which displays the current game board.
     var gameBoard = GameBoard(
         board: widget.game.board,
         tapCallBack: (a, b) => setState(() => widget.game.play(a, b)));
+
+    /// The lower row which is displayed below the board.
     var row = Row(
       children: [
         Expanded(child: player0Name),
@@ -70,6 +82,8 @@ class _GameScreenState extends State<GameScreen> {
         Expanded(child: player1Name),
       ],
     );
+
+    // Return the scaffold for the screen.
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
-/// This widget is used to set up the players and board for a local play game.
+/// A popup that is displayed at the end of the game, announcing the winner
 class GameEndPopup extends StatelessWidget {
+  /// String with the username of the winning player.
   final String winnerUsername;
+
+  /// Const constructor.
   const GameEndPopup({super.key, required this.winnerUsername});
   @override
   Widget build(BuildContext context) {
@@ -15,6 +18,7 @@ class GameEndPopup extends StatelessWidget {
       actions: [
         TextButton(
             onPressed: () {
+              // Pop twice dismis popup and dismis game screen, going back to mode screen.
               Navigator.pop(context);
               Navigator.pop(context);
             },

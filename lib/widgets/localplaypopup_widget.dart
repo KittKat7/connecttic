@@ -23,17 +23,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Row(
-          //   children: [
-          //     Expanded(child: Text(getLang('pmtWidth')), flex: 1),
-          //     Expanded(child: Text(getLang('pmtHeight')), flex: 1),
-          //   ],
-          // ),
-          // Row(
-          //   children: [
-          //     NumberSelector
-          //   ],
-          // )
           Row(
             children: [
               Expanded(flex: 4, child: Text(getLang('pmtPlayer1'))),
