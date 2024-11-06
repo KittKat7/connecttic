@@ -11,7 +11,10 @@ Future<void> main() async {
   setLangMap(en_us.en_us);
   AppTheme appTheme = AppTheme();
   runApp(ThemedWidget(
-    widget: const MyApp(),
+    widget: const DefaultTextStyle(
+      style: TextStyle(fontFamily: "Roboto"),
+      child: MyApp(),
+    ),
     theme: appTheme,
   ));
 }
