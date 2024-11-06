@@ -1,3 +1,4 @@
+import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
@@ -17,6 +18,17 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  @override
+  void initState() {
+    widget.game.setOnEndCallback(
+      (winner) => showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              GameEndPopup(winnerUsername: winner)),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Player player0 = widget.game.players[0];

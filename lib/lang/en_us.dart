@@ -1,3 +1,4 @@
+// ignore: constant_identifier_names
 const Map<String, String> en_us = {
   // Title
   "titleApp": "ConnectTic",
@@ -5,6 +6,7 @@ const Map<String, String> en_us = {
   "titleHelp": "Help/Rules",
   "titleAbout": "About",
   "titleSetupGame": "Setup Game",
+  "titleGameOver": "Game Over",
   // Button
   "btnStartGame": "Start Game",
   "btnHelp": "Help/Rules",
@@ -17,6 +19,7 @@ const Map<String, String> en_us = {
   "pmtPlayer1": "Player 1",
   "pmtPlayer2": "Player 2",
   "pmtAI": "A.I.",
+  "pmtWinner": "Winner: \${0}",
   // Text
   "txtHelp": """
 ## How to play

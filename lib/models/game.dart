@@ -13,13 +13,16 @@ class Game {
   Timer? _timer;
   final ValueNotifier<int> timeNotifier;
 
+  void Function(String winner)? onEndCallback;
+
   /// Tracks the current player.
   Player _currentPlayer;
 
   /// Constructor
   Game(this.board, this.players)
       : _currentPlayer = players[0],
-        timeNotifier = ValueNotifier<int>(0) {
+        timeNotifier = ValueNotifier<int>(0),
+        onEndCallback = null {
     // Initiate the timer
     _timer = Timer.periodic(const Duration(seconds: 1), (time) {
       // If the game has ended, stop the timer and return
@@ -34,6 +37,10 @@ class Game {
   void dispose() {
     _timer?.cancel();
     timeNotifier.dispose();
+  }
+
+  void setOnEndCallback(void Function(String) funct) {
+    onEndCallback = funct;
   }
 
   /// Returns the current player (the player whose turn it is).
@@ -69,6 +76,7 @@ class Game {
     // functions.
     if (board.gameIsWon()) {
       isEnded = true;
+      if (onEndCallback != null) onEndCallback!(_currentPlayer.username);
       return;
     }
 
