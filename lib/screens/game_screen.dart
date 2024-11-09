@@ -62,7 +62,10 @@ class _GameScreenState extends State<GameScreen> {
         valueListenable: widget.game.timeNotifier,
         builder: (context, seconds, child) {
           return Text(
-            '$seconds',
+            getLang('mscMinSec', [
+              (seconds ~/ 60).toString().padLeft(2, '0'),
+              (seconds % 60).toString().padLeft(2, '0')
+            ]),
             textScaler: const TextScaler.linear(_textScale),
           );
         });
@@ -75,11 +78,11 @@ class _GameScreenState extends State<GameScreen> {
     /// The lower row which is displayed below the board.
     var row = Row(
       children: [
-        Expanded(child: player0Name),
-        Expanded(child: player0Tile),
-        const Expanded(child: SizedBox()),
-        Expanded(child: player1Tile),
-        Expanded(child: player1Name),
+        Expanded(flex: 2, child: player0Name),
+        Expanded(flex: 1, child: player0Tile),
+        const Expanded(flex: 0, child: SizedBox()),
+        Expanded(flex: 1, child: player1Tile),
+        Expanded(flex: 2, child: player1Name),
       ],
     );
 

@@ -43,4 +43,6 @@ Support: [kittkat.xyz/support/](https://kittkat.xyz/support/)
 
 **Music: TODO**
 """,
+  // Misc?
+  "mscMinSec": "\${0}:\${1}",
 };
