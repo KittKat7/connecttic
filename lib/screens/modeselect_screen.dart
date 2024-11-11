@@ -2,6 +2,8 @@ import 'package:connecttic/widgets/localplaypopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
+import '../widgets/button_widget.dart';
+
 class ModeSelectScreen extends StatelessWidget {
   const ModeSelectScreen({super.key});
 
@@ -20,22 +22,16 @@ class ModeSelectScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size.fromHeight(40),
-                ),
+              StyledButton(
+                text: getLang('btnLocalPlay'),
                 onPressed: () => showDialog(
                     context: context,
-                    builder: (BuildContext context) => LocalPlayPopup()),
-                child: Marked(getLang('btnLocalPlay')),
+                    builder: (BuildContext context) => const LocalPlayPopup()),
               ),
               const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size.fromHeight(40),
-                ),
+              StyledButton(
+                text: getLang('btnOnlinePlay'),
                 onPressed: () {},
-                child: Marked(getLang('btnOnlinePlay')),
               ),
               // const SizedBox(height: 10),
               // ElevatedButton(
@@ -50,6 +46,23 @@ class ModeSelectScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Button extends StatelessWidget {
+  const Button({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size.fromHeight(40),
+      ),
+      onPressed: () {},
+      child: Marked(getLang('btnOnlinePlay')),
     );
   }
 }

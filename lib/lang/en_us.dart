@@ -12,7 +12,7 @@ const Map<String, String> en_us = {
   "btnHelp": "Help/Rules",
   "btnAbout": "About",
   "btnLocalPlay": "Local Play",
-  "btnOnlinePlay": "Online Play (NOT IMPLEMENTED)",
+  "btnOnlinePlay": "(NOT IMPLEMENTED)",
   "btnCancel": "Cancel",
   "btnConfirm": "Confirm",
   // Prompt
