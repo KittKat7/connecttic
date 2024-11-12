@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/player.dart';
 import 'package:flutter/material.dart';
+import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
 /// Game class manages the game state/ players, current turn, and win status.
 class Game {
@@ -18,15 +19,18 @@ class Game {
   Timer? _timer;
   final ValueNotifier<int> timeNotifier;
 
-  void Function(String winner)? onEndCallback;
+  void Function()? onEndCallback;
 
   /// Tracks the current player.
   Player _currentPlayer;
+
+  final Map<String, String> _gameInfo;
 
   /// Constructor
   Game(this.board, this.players)
       : _currentPlayer = players[0],
         timeNotifier = ValueNotifier<int>(0),
+        _gameInfo = {},
         onEndCallback = null {
     // Initiate the timer
     _timer = Timer.periodic(const Duration(seconds: 1), _onTimeUpdate);
@@ -49,7 +53,7 @@ class Game {
   }
 
   /// Sets the callback function which is run when the game ends.
-  void setOnEndCallback(void Function(String) funct) {
+  void setOnEndCallback(void Function() funct) {
     onEndCallback = funct;
   }
 
@@ -86,7 +90,7 @@ class Game {
     // functions.
     if (board.gameIsWon()) {
       isEnded = true;
-      if (onEndCallback != null) onEndCallback!(_currentPlayer.username);
+      onGameEnd(_currentPlayer);
       return;
     }
 
@@ -94,6 +98,7 @@ class Game {
     // game has ended in a draw.
     if (!board.hasOpenTile()) {
       isEnded = true;
+      onGameEnd(null);
       return;
     }
 
@@ -108,5 +113,20 @@ class Game {
     if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
       board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, true);
     }
+  }
+
+  void onGameEnd(Player? winner) {
+    _gameInfo["winner"] = winner?.username ?? getLang("pmtDraw");
+    int gameTime = timeNotifier.value;
+    _gameInfo["time"] = getLang('mscMinSec', [
+      (gameTime ~/ 60).toString().padLeft(2, '0'),
+      (gameTime % 60).toString().padLeft(2, '0')
+    ]);
+
+    if (onEndCallback != null) onEndCallback!();
+  }
+
+  Map<String, String> getGameInfo() {
+    return Map.from(_gameInfo);
   }
 }

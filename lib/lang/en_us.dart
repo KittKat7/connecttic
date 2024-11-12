@@ -20,6 +20,8 @@ const Map<String, String> en_us = {
   "pmtPlayer2": "Player 2",
   "pmtAI": "A.I.",
   "pmtWinner": "Winner: \${0}",
+  "pmtTime": "Time: \${0}",
+  "pmtDraw": "Draw",
   // Text
   "txtHelp": """
 ## How to play

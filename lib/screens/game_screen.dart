@@ -23,12 +23,17 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     // When initing state, set the onCallBack function in the game to launch the end game popup.
-    widget.game.setOnEndCallback(
-      (winner) => showDialog(
-          context: context,
-          builder: (BuildContext context) =>
-              GameEndPopup(winnerUsername: winner)),
-    );
+    widget.game.setOnEndCallback(onGameEnd);
+  }
+
+  void onGameEnd() {
+    Map<String, String> gameInfo = widget.game.getGameInfo();
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => GameEndPopup(
+              winnerUsername: gameInfo["winner"]!,
+              time: gameInfo["time"]!,
+            ));
   }
 
   @override
