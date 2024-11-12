@@ -113,8 +113,3 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 }
-/*
-
-      ? Transform.scale(scale: 1, child: _marker)
-      : Transform.scale(scale: 0.75, child: _marker);
-      */
