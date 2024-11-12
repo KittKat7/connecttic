@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
 abstract class GameObject {
   Widget getTile();
@@ -11,7 +12,27 @@ abstract class GameObject {
 }
 
 class BlockerObject extends GameObject {
-  static const Widget _tile = Icon(Icons.check_box_outline_blank_rounded);
+  static Widget _tile = Transform.scale(
+      scale: 0.75,
+      child: const ColorFiltered(
+          colorFilter: ColorFilter.mode(Colors.red, BlendMode.modulate),
+          child: Image(
+            image: AssetImage('assets/coins/cross_pixel.png'),
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.none,
+          )));
+
+  static setColor(Color c) {
+    _tile = Transform.scale(
+        scale: 0.75,
+        child: ColorFiltered(
+            colorFilter: ColorFilter.mode(c, BlendMode.modulate),
+            child: const Image(
+              image: AssetImage('assets/coins/cross_pixel.png'),
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.none,
+            )));
+  }
 
   @override
   Widget getTile() {
