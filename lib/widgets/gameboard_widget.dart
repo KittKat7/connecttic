@@ -31,12 +31,17 @@ class GameBoard extends StatelessWidget {
     }
     // Return the widget.
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GridView.count(
-        shrinkWrap: true,
-        crossAxisCount: board.width,
-        childAspectRatio: 1.0,
-        children: boardWidgetList,
+      padding: const EdgeInsets.all(1.0),
+      child: Container(
+        decoration: BoxDecoration(
+            border:
+                Border.all(color: colorScheme(context).onSecondary, width: 4)),
+        child: GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: board.width,
+          childAspectRatio: 1.0,
+          children: boardWidgetList,
+        ),
       ),
     );
   }
@@ -58,11 +63,21 @@ class _BoardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapRegion(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: colorScheme(context).primary),
-        ),
-        child: tile,
+      child: Stack(
+        children: [
+          ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                colorScheme(context).onSecondary,
+                BlendMode.modulate,
+              ),
+              child: Image.asset(
+                'assets/board_tile.png',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                filterQuality: FilterQuality.none,
+              )),
+          tile,
+        ],
       ),
       onTapInside: (event) => onTap(),
     );
