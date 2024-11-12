@@ -21,6 +21,9 @@ jobs:
       - name: Build Flutter web app
         run: flutter build web --web-renderer canvaskit
 
+      - name: Add CNAME file for custom domain
+        run: echo "connecttic-testing.kittkat.xyz" > ./build/web/CNAME
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
