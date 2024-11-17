@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connecttic/models/audio_player.dart';
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/player.dart';
 import 'package:flutter/material.dart';
@@ -113,6 +114,7 @@ class Game {
     if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
       board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, true);
     }
+    AppAudio.getInstance().playEffect(AppAudio.effectPop);
   }
 
   void onGameEnd(Player? winner) {
