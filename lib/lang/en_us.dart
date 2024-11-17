@@ -15,6 +15,7 @@ const Map<String, String> en_us = {
   "btnOnlinePlay": "(NOT IMPLEMENTED)",
   "btnCancel": "Cancel",
   "btnConfirm": "Confirm",
+  "btnContinue": "Continue",
   // Prompt
   "pmtPlayer1": "Player 1",
   "pmtPlayer2": "Player 2",
@@ -44,6 +45,12 @@ Website: [kittkat.xyz](https://kittkat.xyz)\\
 Support: [kittkat.xyz/support/](https://kittkat.xyz/support/)
 
 **Music: TODO**
+""",
+  "txtGreeting": """
+Welcome to ConnectTic! This game is completely free. If you enjoy this game, please consider
+donating to the creators to support this game and their future work. To donate, please visit the
+'About' page for info.\\
+Enjoy!
 """,
   // Misc?
   "mscMinSec": "\${0}:\${1}",
