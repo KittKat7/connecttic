@@ -5,6 +5,8 @@ import 'package:connecttic/screens/game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
+import '../models/computer_player.dart';
+
 /// This widget is used to set up the players and board for a local play game.
 class LocalPlayPopup extends StatefulWidget {
   const LocalPlayPopup({super.key});
@@ -83,26 +85,48 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
                     game: Game(
                       Board(),
                       [
-                        Player(
-                          username[0],
-                          Image.asset(
-                            'assets/coins/coin_pixel.png',
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.none,
-                            width: double.infinity,
-                          ),
-                          Colors.red,
-                        ),
-                        Player(
-                          username[1],
-                          Image.asset(
-                            'assets/coins/coin_pixel.png',
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.none,
-                            width: double.infinity,
-                          ),
-                          Colors.blue,
-                        ),
+                        ai[0]
+                            ? ComputerPlayer(
+                                username[0],
+                                Image.asset(
+                                  'assets/coins/coin_pixel.png',
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.none,
+                                  width: double.infinity,
+                                ),
+                                Colors.red,
+                              )
+                            : Player(
+                                username[0],
+                                Image.asset(
+                                  'assets/coins/coin_pixel.png',
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.none,
+                                  width: double.infinity,
+                                ),
+                                Colors.red,
+                              ),
+                        ai[1]
+                            ? ComputerPlayer(
+                                username[1],
+                                Image.asset(
+                                  'assets/coins/coin_pixel.png',
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.none,
+                                  width: double.infinity,
+                                ),
+                                Colors.blue,
+                              )
+                            : Player(
+                                username[1],
+                                Image.asset(
+                                  'assets/coins/coin_pixel.png',
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.none,
+                                  width: double.infinity,
+                                ),
+                                Colors.blue,
+                              ),
                       ],
                     ),
                   )));

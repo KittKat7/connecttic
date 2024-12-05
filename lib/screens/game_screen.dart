@@ -24,6 +24,13 @@ class _GameScreenState extends State<GameScreen> {
     super.initState();
     // When initing state, set the onCallBack function in the game to launch the end game popup.
     widget.game.setOnEndCallback(onGameEnd);
+    widget.game.setOnUpdateBoard(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.game.dispose();
   }
 
   void onGameEnd() {
@@ -81,7 +88,7 @@ class _GameScreenState extends State<GameScreen> {
     /// The widget which displays the current game board.
     var gameBoard = GameBoard(
         board: widget.game.board,
-        tapCallBack: (a, b) => setState(() => widget.game.play(a, b)));
+        tapCallBack: (a, b) => widget.game.play(a, b));
 
     /// The lower row which is displayed below the board.
     var row = Row(
