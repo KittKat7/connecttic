@@ -23,7 +23,9 @@ class AppAudio {
   static set effectsAreMuted(bool effectsAreMuted) {
     AppAudio audio = getInstance();
     audio._effectsAreMuted = effectsAreMuted;
-    // TODO set volume for effects
+    for (AudioPlayer player in audio.effects) {
+      player.setVolume(musicIsMuted ? 0.0 : 0.5);
+    }
   }
 
   static AppAudio getInstance() {
