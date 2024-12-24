@@ -106,12 +106,6 @@ class Game {
       isEnded = true;
       onGameEnd(_currentPlayer);
     }
-    // Check if their are playable tiles left on the board. If there are no more playable tiles, the
-    // game has ended in a draw.
-    else if (!board.hasOpenTile()) {
-      isEnded = true;
-      onGameEnd(null);
-    }
 
     // Set the play to be highlighted, update the last x and y, and iterate the current player.
     board.setHighlight(x, y, true);
@@ -130,6 +124,13 @@ class Game {
       (_currentPlayer as ComputerPlayer).computerPlay(this);
     }
     if (onUpdateBoard != null) onUpdateBoard!();
+
+    // Check if their are playable tiles left on the board. If there are no more playable tiles, the
+    // game has ended in a draw.
+    if (!board.hasOpenTile()) {
+      isEnded = true;
+      onGameEnd(null);
+    }
     return true;
   }
 
