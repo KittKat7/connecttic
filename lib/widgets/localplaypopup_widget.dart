@@ -17,33 +17,42 @@ class LocalPlayPopup extends StatefulWidget {
 
 class _LocalPlayPopupState extends State<LocalPlayPopup> {
   List<String> username = [getLang('pmtPlayer1'), getLang('pmtPlayer2')];
-  List<bool> ai = [false, true];
+  List<int> ai = [0, 1];
+
+  List<DropdownMenuItem<String>> cpuLevels = ComputerPlayer.computerLevels
+      .map<DropdownMenuItem<String>>((String value) {
+    return DropdownMenuItem(value: value, child: Text(value));
+  }).toList();
 
   @override
   Widget build(BuildContext context) {
     // Widgets for entry fields or checkboxes
     var username0Field = Expanded(
-        flex: 4,
+        flex: 1,
         child: TextFormField(
           initialValue: username[0],
           onChanged: (v) => username[0] = _validateUsername(v),
         ));
     var ai0Checkbox = Expanded(
         flex: 1,
-        child: Checkbox(
-          value: ai[0],
-          onChanged: (t) => setState(() => ai[0] = !ai[0]),
+        child: DropdownButton<String>(
+          value: ComputerPlayer.computerLevels[ai[0]],
+          items: cpuLevels,
+          onChanged: (str) => setState(
+              () => ai[0] = ComputerPlayer.computerLevels.indexOf(str!)),
         ));
     var username1Field = Expanded(
-        flex: 4,
+        flex: 1,
         child: TextFormField(
             initialValue: username[1],
             onChanged: (v) => username[1] = _validateUsername(v)));
     var ai1Checkbox = Expanded(
         flex: 1,
-        child: Checkbox(
-          value: ai[1],
-          onChanged: (t) => setState(() => ai[1] = !ai[1]),
+        child: DropdownButton<String>(
+          value: ComputerPlayer.computerLevels[ai[1]],
+          items: cpuLevels,
+          onChanged: (str) => setState(
+              () => ai[1] = ComputerPlayer.computerLevels.indexOf(str!)),
         ));
 
     return AlertDialog(
@@ -158,11 +167,14 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
       Colors.blue,
     );
 
+    computerPlayer0.level = ai[0];
+    computerPlayer1.level = ai[1];
+
     // Returns a list of player 0 and player 1. Returns the computer player if needed, otherwise the
     // non computer players.
     return [
-      ai[0] ? computerPlayer0 : player0,
-      ai[1] ? computerPlayer1 : player1,
+      ai[0] > 0 ? computerPlayer0 : player0,
+      ai[1] > 0 ? computerPlayer1 : player1,
     ];
   }
 }

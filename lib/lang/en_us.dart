@@ -23,6 +23,8 @@ const Map<String, String> en_us = {
   "pmtWinner": "Winner: \${0}",
   "pmtTime": "Time: \${0}",
   "pmtDraw": "Draw",
+  "pmtCpuLvl0": "User",
+  "pmtCpuLvl1": "Computer Easy",
   // Text
   "txtHelp": """
 ## How to play
