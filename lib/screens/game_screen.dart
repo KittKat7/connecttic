@@ -1,3 +1,4 @@
+import 'package:connecttic/models/computer_player.dart';
 import 'package:connecttic/models/game_object.dart';
 import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,12 @@ class _GameScreenState extends State<GameScreen> {
     /// The widget which displays the current game board.
     var gameBoard = GameBoard(
         board: widget.game.board,
-        tapCallBack: (a, b) => widget.game.play(a, b));
+        tapCallBack: (a, b) {
+          // Only play if the current player is not a computer player.
+          if (widget.game.getCurrentPlayer() is! ComputerPlayer) {
+            widget.game.play(a, b);
+          }
+        });
 
     /// The lower row which is displayed below the board.
     var row = Row(
