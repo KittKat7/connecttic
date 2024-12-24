@@ -38977,8 +38977,7 @@ q.IZ(r,s,!1)}s=o.a
 r=o.w
 s.c[a][b]=r
 if(s.Wb()){o.c=!0
-o.Ur(o.w)}else if(!s.ajR()){o.c=!0
-o.Ur(null)}s.d[a][b]=!0
+o.Ur(o.w)}s.d[a][b]=!0
 r=o.w
 r.b=a
 r.c=b
@@ -38987,11 +38986,12 @@ p=B.b.fZ(q,r)+1
 r=o.w=q[p>=2?0:p]
 q=r.b
 if(q>-1&&r.c>-1)s.IZ(q,r.c,!0)
-s=$.eF;(s==null?$.eF=A.qI():s).Hm("assets/sound_effects/pop-tmp.mp3")
+r=$.eF;(r==null?$.eF=A.qI():r).Hm("assets/sound_effects/pop-tmp.mp3")
 if(!o.c&&o.w instanceof A.nT)t.xS.a(o.w).ty(o)
-s=o.r
-if(s!=null)s.$0()
-return!0},
+r=o.r
+if(r!=null)r.$0()
+if(!s.ajR()){o.c=!0
+o.Ur(null)}return!0},
 Ur(a){var s,r=this.x,q=a==null?null:a.a
 r.n(0,"winner",q==null?A.c5("pmtDraw",B.N):q)
 s=this.e.a
