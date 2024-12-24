@@ -1,9 +1,11 @@
+import 'package:connecttic/lang/en_us.dart' as en_us;
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/game.dart';
 import 'package:connecttic/models/game_object.dart';
 import 'package:connecttic/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kittkatflutterlibrary/lang/kkfl_lang.dart';
 
 /// Run tests related to the game board.
 void main() {
@@ -15,6 +17,7 @@ void main() {
 /// Test for incomplete game draws, IE there are tiles no playable tiles and blockers on the board.
 void testIncompleteDraw() {
   WidgetsFlutterBinding.ensureInitialized();
+  setLangMap(en_us.en_us);
 
   Player p1 = Player("p1", const Icon(Icons.abc));
   Player p2 = Player("p2", const Icon(Icons.abc));
