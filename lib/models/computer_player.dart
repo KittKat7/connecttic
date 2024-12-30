@@ -8,7 +8,7 @@ import 'board.dart';
 
 class ComputerPlayer extends Player {
   int level;
-  ComputerPlayer(super.username, super.tile, [super.color, this.level = 1]);
+  ComputerPlayer(super.tile, [super.color, this.level = 1]);
 
   static const int secondsDelay = 1;
   static List<String> computerLevels = [

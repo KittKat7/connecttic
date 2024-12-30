@@ -54,11 +54,11 @@ class _GameScreenState extends State<GameScreen> {
 
     /// The widget display for the player usernames.
     Widget player0Name = Text(
-      player0.username,
+      getLang('pmtPlayer', [0 + 1]),
       textScaler: const TextScaler.linear(_textScale),
     );
     Widget player1Name = Text(
-      player1.username,
+      getLang('pmtPlayer', [1 + 1]),
       textScaler: const TextScaler.linear(_textScale),
     );
 
@@ -88,7 +88,7 @@ class _GameScreenState extends State<GameScreen> {
 
     /// The widget which displays the current game board.
     var gameBoard = GameBoard(
-        board: widget.game.board,
+        game: widget.game,
         tapCallBack: (a, b) {
           // Only play if the current player is not a computer player.
           if (widget.game.getCurrentPlayer() is! ComputerPlayer) {

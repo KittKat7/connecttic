@@ -16,7 +16,6 @@ class LocalPlayPopup extends StatefulWidget {
 }
 
 class _LocalPlayPopupState extends State<LocalPlayPopup> {
-  List<String> username = [getLang('pmtPlayer1'), getLang('pmtPlayer2')];
   List<int> ai = [0, 1];
 
   List<DropdownMenuItem<String>> cpuLevels = ComputerPlayer.computerLevels
@@ -27,12 +26,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
   @override
   Widget build(BuildContext context) {
     // Widgets for entry fields or checkboxes
-    var username0Field = Expanded(
-        flex: 1,
-        child: TextFormField(
-          initialValue: username[0],
-          onChanged: (v) => username[0] = _validateUsername(v),
-        ));
     var ai0Checkbox = Expanded(
         flex: 1,
         child: DropdownButton<String>(
@@ -41,11 +34,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
           onChanged: (str) => setState(
               () => ai[0] = ComputerPlayer.computerLevels.indexOf(str!)),
         ));
-    var username1Field = Expanded(
-        flex: 1,
-        child: TextFormField(
-            initialValue: username[1],
-            onChanged: (v) => username[1] = _validateUsername(v)));
     var ai1Checkbox = Expanded(
         flex: 1,
         child: DropdownButton<String>(
@@ -62,22 +50,22 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
         children: [
           Row(
             children: [
-              Expanded(flex: 4, child: Text(getLang('pmtPlayer1'))),
+              Expanded(flex: 4, child: Text(getLang('pmtPlayer', [0 + 1]))),
               Expanded(flex: 1, child: Text(getLang('pmtAI')))
             ],
           ),
           Row(
-            children: [username0Field, ai0Checkbox],
+            children: [ai0Checkbox],
           ),
           const SizedBox(height: 10),
           Row(
             children: [
-              Expanded(flex: 4, child: Text(getLang('pmtPlayer2'))),
+              Expanded(flex: 4, child: Text(getLang('pmtPlayer', [1 + 1]))),
               Expanded(flex: 1, child: Text(getLang('pmtAI')))
             ],
           ),
           Row(
-            children: [username1Field, ai1Checkbox],
+            children: [ai1Checkbox],
           ),
         ],
       ),
@@ -123,7 +111,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
   List<Player> get _playerList {
     // The computer and non computer player for player 0
     var computerPlayer0 = ComputerPlayer(
-      username[0],
       Image.asset(
         'assets/coins/coin_pixel.png',
         fit: BoxFit.cover,
@@ -134,7 +121,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
     );
 
     var player0 = Player(
-      username[0],
       Image.asset(
         'assets/coins/coin_pixel.png',
         fit: BoxFit.cover,
@@ -146,7 +132,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
 
     // The computer and non computer player for player 1
     var computerPlayer1 = ComputerPlayer(
-      username[1],
       Image.asset(
         'assets/coins/coin_pixel.png',
         fit: BoxFit.cover,
@@ -157,7 +142,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
     );
 
     var player1 = Player(
-      username[1],
       Image.asset(
         'assets/coins/coin_pixel.png',
         fit: BoxFit.cover,

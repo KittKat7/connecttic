@@ -17,6 +17,7 @@ const Map<String, String> en_us = {
   "btnConfirm": "Confirm",
   "btnContinue": "Continue",
   // Prompt
+  "pmtPlayer": "Player \${0}",
   "pmtPlayer1": "Player 1",
   "pmtPlayer2": "Player 2",
   "pmtAI": "A.I.",

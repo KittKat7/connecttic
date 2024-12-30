@@ -1,7 +1,6 @@
 import 'package:connecttic/lang/en_us.dart' as en_us;
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/game.dart';
-import 'package:connecttic/models/game_object.dart';
 import 'package:connecttic/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,8 +18,8 @@ void testIncompleteDraw() {
   WidgetsFlutterBinding.ensureInitialized();
   setLangMap(en_us.en_us);
 
-  Player p1 = Player("p1", const Icon(Icons.abc));
-  Player p2 = Player("p2", const Icon(Icons.abc));
+  Player p1 = Player(const Icon(Icons.abc));
+  Player p2 = Player(const Icon(Icons.abc));
   Board board = Board(7, 6);
   Game game = Game(board, [p1, p2]);
 
@@ -90,7 +89,7 @@ void testBlockAroundLastPlay() {
   for (int i = 1; i < 4; i++) {
     for (int j = 1; j < 4; j++) {
       if (i == 2 && j == 2) continue;
-      expect(board.get(i, j) is BlockerObject, true);
+      expect(board.get(i, j) == -1, true);
     }
   }
 }
@@ -100,7 +99,7 @@ void testBoardDrawStateDetected() {
   Board board = Board();
   for (int x = 0; x < board.width; x++) {
     for (int y = 0; y < board.height; y++) {
-      board.set(x, y, BlockerObject());
+      board.set(x, y, -1);
     }
   }
   expect(board.hasOpenTile(), false);

@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
-import '../models/board.dart';
+import '../models/game.dart';
 
 /// This widget displays the game board.
 class GameBoard extends StatelessWidget {
   /// The board which should be displayed.
-  final Board board;
+  final Game game;
 
   /// The function to run when tapped/clicked.
   final void Function(int, int) tapCallBack;
 
   /// Const constructor.
-  const GameBoard({super.key, required this.board, required this.tapCallBack});
+  const GameBoard({super.key, required this.game, required this.tapCallBack});
 
   @override
   Widget build(BuildContext context) {
     // List of all widgets on the board.
     List<Widget> boardWidgetList = [];
     // For every x and every y, add the tile to the list witht he correct widget and onTap function.
-    for (int h = 0; h < board.height; h++) {
-      for (int w = 0; w < board.width; w++) {
+    for (int h = 0; h < game.board.height; h++) {
+      for (int w = 0; w < game.board.width; w++) {
         boardWidgetList.add(
           _BoardTile(
-            tile: board.getTile(w, h),
+            tile: game.getTileWidget(w, h),
             onTap: () => tapCallBack(w, h),
           ),
         );
@@ -38,7 +38,7 @@ class GameBoard extends StatelessWidget {
                 Border.all(color: colorScheme(context).onSecondary, width: 4)),
         child: GridView.count(
           shrinkWrap: true,
-          crossAxisCount: board.width,
+          crossAxisCount: game.board.width,
           childAspectRatio: 1.0,
           children: boardWidgetList,
         ),

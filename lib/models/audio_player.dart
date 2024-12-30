@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 
 class AppAudio {
@@ -45,6 +46,7 @@ class AppAudio {
   }
 
   void playMusic(String track) async {
+    if (!kIsWeb) return;
     await _musicPlayer.stop();
     _musicPlayer.setLoopMode(LoopMode.one);
     _musicPlayer.setAsset(track);
@@ -52,6 +54,7 @@ class AppAudio {
   }
 
   void playEffect(String sound) async {
+    if (!kIsWeb) return;
     AudioPlayer effect = AudioPlayer();
     effect.setVolume(_effectsAreMuted ? 0.0 : 0.75);
     effects.add(effect);

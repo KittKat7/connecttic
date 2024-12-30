@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connecttic/models/audio_player.dart';
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/computer_player.dart';
+import 'package:connecttic/models/game_object.dart';
 import 'package:connecttic/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
@@ -14,6 +15,7 @@ class Game {
 
   /// The list of players in the game.
   List<Player> players;
+  List<List<int>>? winset;
 
   /// Bool flag, true if the game has ended.
   bool isEnded = false;
@@ -93,22 +95,21 @@ class Game {
     // If the current players last x and y are not negative (they have played before) then un
     // highlight their last play and unset their last play.
     if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
-      board.setHighlight(_currentPlayer.lastx, _currentPlayer.lasty, false);
       board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, false);
     }
 
     // Set the tile at the play location to be a copy of the player's tile.
-    board.set(x, y, _currentPlayer);
+    board.set(x, y, players.indexOf(_currentPlayer));
 
     // If the board finds a win condition, mark the game as ended and skip the rest of the play
     // functions.
-    if (board.gameIsWon()) {
+    winset = board.gameIsWon();
+    if (winset != null) {
       isEnded = true;
       onGameEnd(_currentPlayer);
     }
 
     // Set the play to be highlighted, update the last x and y, and iterate the current player.
-    board.setHighlight(x, y, true);
     _currentPlayer.lastx = x;
     _currentPlayer.lasty = y;
     iterateCurrentPlayer();
@@ -135,7 +136,9 @@ class Game {
   }
 
   void onGameEnd(Player? winner) {
-    _gameInfo["winner"] = winner?.username ?? getLang("pmtDraw");
+    _gameInfo["winner"] = winner != null
+        ? getLang('pmtPlayer', [players.indexOf(winner) + 1])
+        : getLang("pmtDraw");
     int gameTime = timeNotifier.value;
     _gameInfo["time"] = getLang('mscMinSec', [
       (gameTime ~/ 60).toString().padLeft(2, '0'),
@@ -147,5 +150,17 @@ class Game {
 
   Map<String, String> getGameInfo() {
     return Map.from(_gameInfo);
+  }
+
+  Widget getTileWidget(int x, int y) {
+    int? tile = board.get(x, y);
+    if (tile == null) return const SizedBox();
+    if (tile == -1) return BlockerObject().getTile();
+    Player play = players[tile];
+    if (play.lastx == x && play.lasty == y) return play.getBigTile();
+    for (int i = 0; i < 4 && winset != null; i++) {
+      if (winset![i][0] == x && winset![i][1] == y) return play.getBigTile();
+    }
+    return play.getTile();
   }
 }

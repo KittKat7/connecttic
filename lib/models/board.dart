@@ -1,7 +1,3 @@
-import 'package:connecttic/models/game_object.dart';
-import 'package:connecttic/models/player.dart';
-import 'package:flutter/material.dart';
-
 /// The Board object keeps track of where the player plays by using a,b,c,..., to track player
 /// tokens on the board, A,B,C,..., to track the last played token, "-" to track blocked tiles and
 /// "" (empty string) for empty tiles.
@@ -13,56 +9,41 @@ class Board {
   int height;
 
   /// Board[w][h]
-  final List<List<GameObject?>> _board;
-
-  /// Secondary board which tracks which tiles are highlighted
-  List<List<bool>> _isHighlighted;
+  final List<List<int?>> _board;
 
   /// Board constructor
   Board([int w = 7, int h = 6])
       : width = w,
         height = h,
-        _isHighlighted = [],
         _board = [] {
     // Initiate [_board] with null
     for (int i = 0; i < width; i++) {
-      List<GameObject?> tmp = [];
+      List<int?> tmp = [];
       for (int j = 0; j < height; j++) {
         tmp.add(null);
       }
       _board.add(tmp);
     }
-    // Initiate [_isHighlighted] with false
-    _isHighlighted =
-        List.generate(width, (_) => List.generate(height, (_) => false));
   }
 
   /// get(x,y) returns the string at the given x (width) and y (height) position.
-  GameObject? get(int x, int y) {
+  int? get(int x, int y) {
     return _board[x][y];
   }
 
-  /// Returns the widget tile for tile game object at the given x, y
-  Widget getTile(int x, int y) {
-    if (get(x, y) == null) return const SizedBox();
-    return _isHighlighted[x][y]
-        ? get(x, y)!.getBigTile()
-        : get(x, y)!.getTile();
-  }
-
   /// set(x,y,item) sets the tile at _board[x][y] to be item.
-  void set(int x, int y, GameObject? item) {
+  void set(int x, int y, int? item) {
     _board[x][y] = item;
   }
 
   /// Blocks a given tile if the tile is empty, IE changed "" to "-".\
   void _block(int x, int y) {
-    if (get(x, y) == null) set(x, y, BlockerObject());
+    if (get(x, y) == null) set(x, y, -1);
   }
 
   /// Unblocks a given tile if the tile is blocked, IE changes "-" to "".
   void _unblock(int x, int y) {
-    if (get(x, y) is BlockerObject) set(x, y, null);
+    if (_isBlocker(get(x, y))) set(x, y, null);
   }
 
   /// This method sets the tile at x y to be the last played piece and will mark out open tiles
@@ -79,51 +60,63 @@ class Board {
     }
   }
 
-  /// Capitalizes the item at x y.
-  void setHighlight(int x, int y, status) {
-    _isHighlighted[x][y] = status;
+  bool _isPlayer(int? item) {
+    return item == null
+        ? false
+        : item < 0
+            ? false
+            : true;
+  }
+
+  bool _isBlocker(int? item) {
+    return item == -1;
   }
 
   /// Checks whether a player has won the game. If so, return true, otherwise, return false. A
   /// player can win by getting four tiles in a row, column, down diagonal, or up diagonal.
   /// If a win condition is found, return true, and highlight the four in a row winning tiles.
-  bool gameIsWon() {
+  List<List<int>>? gameIsWon() {
+    List<List<int>> winset = [];
     // For every tile in the board, (for every x: for every y: etc...).
     for (int x = 0; x < _board.length; x++) {
       for (int y = 0; y < _board[x].length; y++) {
         // If the tile at x y is empty, not a player tile, continue past this tile.
-        if (_board[x][y] is! Player) continue;
+        if (!_isPlayer(_board[x][y])) continue;
         // Check if the player has four tiles in a row.
         if (_checkWinRow(x, y)) {
+          winset = [];
           for (int i = 0; i < 4; i++) {
-            setHighlight(x + i, y, true);
+            winset.add([x + i, y]);
           }
-          return true;
+          return winset;
         }
         // Check if the player has four tiles in a down diagonal.
         else if (_checkWinDiag(x, y)) {
+          winset = [];
           for (int i = 0; i < 4; i++) {
-            setHighlight(x + i, y + i, true);
+            winset.add([x + i, y + i]);
           }
-          return true;
+          return winset;
         }
         // Check if the player has four tiles in an up diagonal.
         else if (_checkWinDiagR(x, y)) {
+          winset = [];
           for (int i = 0; i < 4; i++) {
-            setHighlight(x + i, y - i, true);
+            winset.add([x + i, y - i]);
           }
-          return true;
+          return winset;
         }
         // Check if the player has four tiles in a column.
         else if (_checkWinCol(x, y)) {
+          winset = [];
           for (int i = 0; i < 4; i++) {
-            setHighlight(x, y + i, true);
+            winset.add([x, y + i]);
           }
-          return true;
+          return winset;
         }
       }
     }
-    return false;
+    return null;
   }
 
   /// Returns true if there are any empty tiles on the board, otherwise, false if the board is full
