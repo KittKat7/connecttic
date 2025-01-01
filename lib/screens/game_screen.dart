@@ -56,8 +56,8 @@ class _GameScreenState extends State<GameScreen> {
     BlockerObject.setColor(colorScheme(context).primary);
 
     /// Player 0 and 1 in the game.
-    Player player0 = widget.game.players[0];
-    Player player1 = widget.game.players[1];
+    Player player1 = widget.game.players.get(1);
+    Player player2 = widget.game.players.get(2);
 
     /// The widget display for the player usernames.
     Widget player0Name = Text(
@@ -70,13 +70,13 @@ class _GameScreenState extends State<GameScreen> {
     );
 
     /// Tiles/widgets for the players.
-    Widget player0Tile = player0.getTile();
     Widget player1Tile = player1.getTile();
+    Widget player2Tile = player2.getTile();
     // If the player is the current player, use the big tile.
-    if (widget.game.getCurrentPlayer() == widget.game.players[0]) {
-      player0Tile = widget.game.players[0].getBigTile();
+    if (widget.game.getCurrentPlayer() == player1) {
+      player1Tile = player1.getBigTile();
     } else {
-      player1Tile = widget.game.players[1].getBigTile();
+      player2Tile = player2.getBigTile();
     }
 
     // /// Listens to the time on the game timer. When the time updates, return a new Text widget which
@@ -100,9 +100,9 @@ class _GameScreenState extends State<GameScreen> {
     var row = Row(
       children: [
         Expanded(flex: 2, child: player0Name),
-        Expanded(flex: 1, child: player0Tile),
-        const Expanded(flex: 0, child: SizedBox()),
         Expanded(flex: 1, child: player1Tile),
+        const Expanded(flex: 0, child: SizedBox()),
+        Expanded(flex: 1, child: player2Tile),
         Expanded(flex: 2, child: player1Name),
       ],
     );

@@ -23,7 +23,7 @@ void testIncompleteDraw() {
   Player p1 = Player(const Icon(Icons.abc));
   Player p2 = Player(const Icon(Icons.abc));
   Board board = Board(7, 6);
-  Game game = Game(board, [p1, p2]);
+  Game game = Game(board, PlayerList.fromList([p1, p2]));
 
   List<List<int>> plays = [
     // First row

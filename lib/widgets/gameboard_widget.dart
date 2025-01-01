@@ -57,15 +57,14 @@ class GameBoard extends StatelessWidget {
   }
 
   Widget getTileWidget(int x, int y) {
-    int? tile = game.board.get(x, y);
-    if (tile == null) return const SizedBox();
-    if (tile == -1) return BlockerObject().getTile();
-    Player play = game.players[tile];
-    if (play.lastx == x && play.lasty == y) return play.getBigTile();
+    if (game.board.tileIsEmpty(x, y)) return const SizedBox();
+    if (game.board.tileIsBlocker(x, y)) return BlockerObject().getTile();
+    Player player = game.getPlayerAtPosition(x, y);
+    if (player.lastx == x && player.lasty == y) return player.getBigTile();
     for (int i = 0; i < 4 && game.winset != null; i++) {
-      if (game.winset![i][0] == x && game.winset![i][1] == y) return play.getBigTile();
+      if (game.winset![i][0] == x && game.winset![i][1] == y) return player.getBigTile();
     }
-    return play.getTile();
+    return player.getTile();
   }
   // @override
   // State<GameBoard> createState() => _GameBoardState();

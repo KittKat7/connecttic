@@ -18,8 +18,8 @@ class LocalPlayPopup extends StatefulWidget {
 class _LocalPlayPopupState extends State<LocalPlayPopup> {
   List<int> ai = [0, 1];
 
-  List<DropdownMenuItem<String>> cpuLevels = ComputerPlayer.computerLevels
-      .map<DropdownMenuItem<String>>((String value) {
+  List<DropdownMenuItem<String>> cpuLevels =
+      ComputerPlayer.computerLevels.map<DropdownMenuItem<String>>((String value) {
     return DropdownMenuItem(value: value, child: Text(value));
   }).toList();
 
@@ -31,16 +31,14 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
         child: DropdownButton<String>(
           value: ComputerPlayer.computerLevels[ai[0]],
           items: cpuLevels,
-          onChanged: (str) => setState(
-              () => ai[0] = ComputerPlayer.computerLevels.indexOf(str!)),
+          onChanged: (str) => setState(() => ai[0] = ComputerPlayer.computerLevels.indexOf(str!)),
         ));
     var ai1Checkbox = Expanded(
         flex: 1,
         child: DropdownButton<String>(
           value: ComputerPlayer.computerLevels[ai[1]],
           items: cpuLevels,
-          onChanged: (str) => setState(
-              () => ai[1] = ComputerPlayer.computerLevels.indexOf(str!)),
+          onChanged: (str) => setState(() => ai[1] = ComputerPlayer.computerLevels.indexOf(str!)),
         ));
 
     return AlertDialog(
@@ -70,9 +68,7 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
         ],
       ),
       actions: [
-        TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(getLang('btnCancel'))),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(getLang('btnCancel'))),
         TextButton(
             onPressed: () {
               _onConfirmBtnPress(context);
@@ -91,7 +87,7 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
         genRoute(GameScreen(
           game: Game(
             Board(),
-            _playerList,
+            PlayerList.fromList(_playerList),
           ),
         )));
   }

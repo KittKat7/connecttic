@@ -11,7 +11,7 @@ class Game {
   Board board;
 
   /// The list of players in the game.
-  List<Player> players;
+  PlayerList players;
   List<List<int>>? winset;
 
   /// Bool flag, true if the game has ended.
@@ -30,7 +30,7 @@ class Game {
 
   /// Constructor
   Game(this.board, this.players)
-      : _currentPlayer = players[0],
+      : _currentPlayer = players.get(1),
         _gameInfo = {},
         gameRuntime = 0,
         onEndCallback = null {
@@ -73,11 +73,15 @@ class Game {
     return _currentPlayer;
   }
 
+  Player getPlayerAtPosition(int x, int y) {
+    if (!board.tileIsPlayer(x, y)) throw Exception();
+    if (board.get(x, y) > 9) return players.get(board.get(x, y) ~/ 10);
+    return players.get(board.get(x, y));
+  }
+
   /// Cycles [_currentPlyer] to be the next player in the list.
   void iterateCurrentPlayer() {
-    int index = players.indexOf(_currentPlayer) + 1;
-    if (index >= players.length) index = 0;
-    _currentPlayer = players[index];
+    _currentPlayer = players.nextPlayer(_currentPlayer);
   }
 
   /// Manages the functions needed to be run when a player plays. This method runs when a player
@@ -86,7 +90,7 @@ class Game {
   bool play(int x, int y) {
     // If the selected tile is NOT an EmptyTile, its either a blocker or a player, return and don't
     // complete the play.
-    if (isEnded || board.get(x, y) != null) return false;
+    if (isEnded || !board.tileIsEmpty(x, y)) return false;
 
     // If the current players last x and y are not negative (they have played before) then un
     // highlight their last play and unset their last play.
@@ -95,7 +99,7 @@ class Game {
     }
 
     // Set the tile at the play location to be a copy of the player's tile.
-    board.set(x, y, players.indexOf(_currentPlayer));
+    board.set(x, y, players.getNum(_currentPlayer));
 
     // If the board finds a win condition, mark the game as ended and skip the rest of the play
     // functions.
@@ -132,7 +136,7 @@ class Game {
 
   void onGameEnd(Player? winner) {
     _gameInfo["winner"] =
-        winner != null ? getLang('pmtPlayer', [players.indexOf(winner) + 1]) : getLang("pmtDraw");
+        winner != null ? getLang('pmtPlayer', [players.getNum(winner)]) : getLang("pmtDraw");
     int gameTime = gameRuntime;
     _gameInfo["time"] = getLang('mscMinSec',
         [(gameTime ~/ 60).toString().padLeft(2, '0'), (gameTime % 60).toString().padLeft(2, '0')]);
@@ -143,4 +147,26 @@ class Game {
   Map<String, String> getGameInfo() {
     return Map.from(_gameInfo);
   }
+}
+
+class PlayerList {
+  final List<Player> _players;
+  PlayerList() : _players = [];
+
+  Player get(int number) => _players[number - 1];
+  void set(int number, Player player) => _players[number] = player;
+  int add(Player player) {
+    _players.add(player);
+    return _players.length;
+  }
+
+  int getNum(Player player) => _players.indexOf(player) + 1;
+
+  PlayerList.fromList(List<Player> players) : _players = players;
+
+  int get length => _players.length;
+
+  Player nextPlayer(Player player) => _players.indexOf(player) + 1 < _players.length
+      ? _players[_players.indexOf(player) + 1]
+      : _players[0];
 }

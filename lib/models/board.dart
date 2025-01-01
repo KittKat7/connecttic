@@ -4,6 +4,9 @@ import 'dart:convert';
 /// tokens on the board, A,B,C,..., to track the last played token, "-" to track blocked tiles and
 /// "" (empty string) for empty tiles.
 class Board {
+  static const int blocker = -1;
+  static const int empty = 0;
+
   /// Width
   int width;
 
@@ -11,7 +14,7 @@ class Board {
   int height;
 
   /// Board[w][h]
-  List<List<int?>> _board;
+  List<List<int>> _board;
 
   /// Board constructor
   Board([int w = 7, int h = 6])
@@ -20,32 +23,32 @@ class Board {
         _board = [] {
     // Initiate [_board] with null
     for (int i = 0; i < width; i++) {
-      List<int?> tmp = [];
+      List<int> tmp = [];
       for (int j = 0; j < height; j++) {
-        tmp.add(null);
+        tmp.add(empty);
       }
       _board.add(tmp);
     }
   }
 
   /// get(x,y) returns the string at the given x (width) and y (height) position.
-  int? get(int x, int y) {
+  int get(int x, int y) {
     return _board[x][y];
   }
 
   /// set(x,y,item) sets the tile at _board[x][y] to be item.
-  void set(int x, int y, int? item) {
+  void set(int x, int y, int item) {
     _board[x][y] = item;
   }
 
   /// Blocks a given tile if the tile is empty, IE changed "" to "-".\
   void _block(int x, int y) {
-    if (get(x, y) == null) set(x, y, -1);
+    if (get(x, y) == empty) set(x, y, -1);
   }
 
   /// Unblocks a given tile if the tile is blocked, IE changes "-" to "".
   void _unblock(int x, int y) {
-    if (_isBlocker(get(x, y))) set(x, y, null);
+    if (_isBlocker(get(x, y))) set(x, y, empty);
   }
 
   /// This method sets the tile at x y to be the last played piece and will mark out open tiles
@@ -62,17 +65,27 @@ class Board {
     }
   }
 
-  bool _isPlayer(int? item) {
-    return item == null
-        ? false
-        : item < 0
-            ? false
-            : true;
+  bool _isPlayer(int item) {
+    switch (item) {
+      case blocker:
+      case empty:
+        return false;
+      default:
+        return true;
+    }
   }
 
-  bool _isBlocker(int? item) {
-    return item == -1;
+  bool _isBlocker(int item) {
+    return item == blocker;
   }
+
+  bool _isEmpty(int item) {
+    return item == empty;
+  }
+
+  bool tileIsPlayer(int x, int y) => _isPlayer(get(x, y));
+  bool tileIsEmpty(int x, int y) => get(x, y) == empty;
+  bool tileIsBlocker(int x, int y) => get(x, y) == blocker;
 
   /// Checks whether a player has won the game. If so, return true, otherwise, return false. A
   /// player can win by getting four tiles in a row, column, down diagonal, or up diagonal.
@@ -126,7 +139,7 @@ class Board {
   bool hasOpenTile() {
     for (int x = 0; x < _board.length; x++) {
       for (int y = 0; y < _board[x].length; y++) {
-        if (_board[x][y] == null) return true;
+        if (_board[x][y] == empty) return true;
       }
     }
     return false;
@@ -189,10 +202,10 @@ class Board {
     int height = mapData["h"];
     List<dynamic> boardData = json.decode(mapData["b"]);
 
-    List<List<int?>> boardArray = [];
+    List<List<int>> boardArray = [];
     int a = 0;
     for (int i = 0; i < width; i++) {
-      List<int?> tmp = [];
+      List<int> tmp = [];
       for (int j = 0; j < height; j++) {
         tmp.add(boardData[a]);
         a++;
