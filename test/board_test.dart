@@ -11,6 +11,8 @@ void main() {
   test("Test incomplete game draw cases", testIncompleteDraw);
   test("Check draw conditions", testBoardDrawStateDetected);
   test("Check set last play", testBlockAroundLastPlay);
+  test("Check equals comparison", testEqual);
+  test("Test json to and from", testToFromJson);
 }
 
 /// Test for incomplete game draws, IE there are tiles no playable tiles and blockers on the board.
@@ -103,4 +105,33 @@ void testBoardDrawStateDetected() {
     }
   }
   expect(board.hasOpenTile(), false);
+}
+
+void testEqual() {
+  Board board1 = Board();
+  board1.set(0, 1, 1);
+  board1.set(2, 1, 1);
+  board1.set(4, 1, 1);
+
+  Board board2 = Board();
+  board2.set(0, 1, 1);
+  board2.set(2, 1, 1);
+  board2.set(4, 1, 1);
+
+  expect(board1, board2);
+}
+
+void testToFromJson() {
+  Board board1 = Board();
+  board1.set(0, 0, 1);
+  board1.set(1, 0, 1);
+  board1.set(2, 0, 2);
+  board1.set(3, 0, 1);
+
+  String json = board1.toJson();
+  Board board2 = Board.fromJson(json);
+
+  expect(json, board2.toJson());
+
+  expect(board1, board2);
 }

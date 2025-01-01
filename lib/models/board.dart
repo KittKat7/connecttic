@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// The Board object keeps track of where the player plays by using a,b,c,..., to track player
 /// tokens on the board, A,B,C,..., to track the last played token, "-" to track blocked tiles and
 /// "" (empty string) for empty tiles.
@@ -9,7 +11,7 @@ class Board {
   int height;
 
   /// Board[w][h]
-  final List<List<int?>> _board;
+  List<List<int?>> _board;
 
   /// Board constructor
   Board([int w = 7, int h = 6])
@@ -165,4 +167,56 @@ class Board {
     }
     return true;
   }
+
+  String toJson() {
+    List<dynamic> boardData = [];
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        boardData.add(_board[i][j]);
+      }
+    }
+    Map<String, dynamic> mapData = {
+      "w": width,
+      "h": height,
+      "b": json.encode(boardData),
+    };
+    return json.encode(mapData);
+  }
+
+  static Board fromJson(String jsonData) {
+    Map<String, dynamic> mapData = json.decode(jsonData);
+    int width = mapData["w"];
+    int height = mapData["h"];
+    List<dynamic> boardData = json.decode(mapData["b"]);
+
+    List<List<int?>> boardArray = [];
+    int a = 0;
+    for (int i = 0; i < width; i++) {
+      List<int?> tmp = [];
+      for (int j = 0; j < height; j++) {
+        tmp.add(boardData[a]);
+        a++;
+      }
+      boardArray.add(tmp);
+    }
+    Board board = Board(width, height);
+    board._board = boardArray;
+    return board;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! Board) return false;
+    if (width != other.width) return false;
+    if (height != other.height) return false;
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        if (_board[i][j] != other._board[i][j]) return false;
+      }
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode => toJson().hashCode;
 }
