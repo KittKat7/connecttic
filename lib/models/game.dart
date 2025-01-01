@@ -1,11 +1,8 @@
 import 'dart:async';
 
-import 'package:connecttic/models/audio_player.dart';
 import 'package:connecttic/models/board.dart';
 import 'package:connecttic/models/computer_player.dart';
-import 'package:connecttic/models/game_object.dart';
 import 'package:connecttic/models/player.dart';
-import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
 /// Game class manages the game state/ players, current turn, and win status.
@@ -21,7 +18,7 @@ class Game {
   bool isEnded = false;
 
   Timer? _timer;
-  final ValueNotifier<int> timeNotifier;
+  int gameRuntime;
 
   void Function()? onEndCallback;
   void Function()? onUpdateBoard;
@@ -34,8 +31,8 @@ class Game {
   /// Constructor
   Game(this.board, this.players)
       : _currentPlayer = players[0],
-        timeNotifier = ValueNotifier<int>(0),
         _gameInfo = {},
+        gameRuntime = 0,
         onEndCallback = null {
     // Initiate the timer
     _timer = Timer.periodic(const Duration(seconds: 1), _onTimeUpdate);
@@ -51,13 +48,12 @@ class Game {
       _timer?.cancel();
       return;
     }
-    timeNotifier.value++;
+    gameRuntime++;
   }
 
   /// Dispose of the game, cancel the timer and dispose of the time notifier.
   void dispose() {
     _timer?.cancel();
-    timeNotifier.dispose();
     isEnded = true;
   }
 
@@ -119,7 +115,6 @@ class Game {
     if (_currentPlayer.lastx > -1 && _currentPlayer.lasty > -1) {
       board.setLastPlay(_currentPlayer.lastx, _currentPlayer.lasty, true);
     }
-    AppAudio.getInstance().playEffect(AppAudio.effectPop);
 
     if (!isEnded && _currentPlayer is ComputerPlayer) {
       (_currentPlayer as ComputerPlayer).computerPlay(this);
@@ -136,31 +131,16 @@ class Game {
   }
 
   void onGameEnd(Player? winner) {
-    _gameInfo["winner"] = winner != null
-        ? getLang('pmtPlayer', [players.indexOf(winner) + 1])
-        : getLang("pmtDraw");
-    int gameTime = timeNotifier.value;
-    _gameInfo["time"] = getLang('mscMinSec', [
-      (gameTime ~/ 60).toString().padLeft(2, '0'),
-      (gameTime % 60).toString().padLeft(2, '0')
-    ]);
+    _gameInfo["winner"] =
+        winner != null ? getLang('pmtPlayer', [players.indexOf(winner) + 1]) : getLang("pmtDraw");
+    int gameTime = gameRuntime;
+    _gameInfo["time"] = getLang('mscMinSec',
+        [(gameTime ~/ 60).toString().padLeft(2, '0'), (gameTime % 60).toString().padLeft(2, '0')]);
 
     if (onEndCallback != null) onEndCallback!();
   }
 
   Map<String, String> getGameInfo() {
     return Map.from(_gameInfo);
-  }
-
-  Widget getTileWidget(int x, int y) {
-    int? tile = board.get(x, y);
-    if (tile == null) return const SizedBox();
-    if (tile == -1) return BlockerObject().getTile();
-    Player play = players[tile];
-    if (play.lastx == x && play.lasty == y) return play.getBigTile();
-    for (int i = 0; i < 4 && winset != null; i++) {
-      if (winset![i][0] == x && winset![i][1] == y) return play.getBigTile();
-    }
-    return play.getTile();
   }
 }

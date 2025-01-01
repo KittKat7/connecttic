@@ -1,4 +1,5 @@
-import 'package:connecttic/models/computer_player.dart';
+import 'dart:async';
+
 import 'package:connecttic/models/game_object.dart';
 import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,14 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  int gameTime = 0;
+  late Timer timer;
+
   @override
   void initState() {
     super.initState();
     // When initing state, set the onCallBack function in the game to launch the end game popup.
+    timer = Timer.periodic(const Duration(seconds: 1), (t) => setState(() => gameTime++));
     widget.game.setOnEndCallback(onGameEnd);
     widget.game.setOnUpdateBoard(() => setState(() {}));
   }
@@ -31,11 +36,13 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void dispose() {
     super.dispose();
+    timer.cancel();
     widget.game.dispose();
   }
 
   void onGameEnd() {
     Map<String, String> gameInfo = widget.game.getGameInfo();
+    timer.cancel();
     showDialog(
         context: context,
         builder: (BuildContext context) => GameEndPopup(
@@ -72,29 +79,22 @@ class _GameScreenState extends State<GameScreen> {
       player1Tile = widget.game.players[1].getBigTile();
     }
 
-    /// Listens to the time on the game timer. When the time updates, return a new Text widget which
-    /// displays the updated time.
-    var valueListenableBuilder = ValueListenableBuilder<int>(
-        valueListenable: widget.game.timeNotifier,
-        builder: (context, seconds, child) {
-          return Text(
-            getLang('mscMinSec', [
-              (seconds ~/ 60).toString().padLeft(2, '0'),
-              (seconds % 60).toString().padLeft(2, '0')
-            ]),
-            textScaler: const TextScaler.linear(_textScale),
-          );
-        });
+    // /// Listens to the time on the game timer. When the time updates, return a new Text widget which
+    // /// displays the updated time.
+    // var valueListenableBuilder = ValueListenableBuilder<int>(
+    //     valueListenable: widget.game.timeNotifier,
+    //     builder: (context, seconds, child) {
+    //       return     //     });
+    var gameTimeDisplay = Text(
+      getLang('mscMinSec', [
+        (gameTime ~/ 60).toString().padLeft(2, '0'),
+        (gameTime % 60).toString().padLeft(2, '0')
+      ]),
+      textScaler: const TextScaler.linear(_textScale),
+    );
 
     /// The widget which displays the current game board.
-    var gameBoard = GameBoard(
-        game: widget.game,
-        tapCallBack: (a, b) {
-          // Only play if the current player is not a computer player.
-          if (widget.game.getCurrentPlayer() is! ComputerPlayer) {
-            widget.game.play(a, b);
-          }
-        });
+    var gameBoard = GameBoard(game: widget.game);
 
     /// The lower row which is displayed below the board.
     var row = Row(
@@ -119,7 +119,7 @@ class _GameScreenState extends State<GameScreen> {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [valueListenableBuilder, gameBoard, row],
+            children: [gameTimeDisplay, gameBoard, row],
           ),
         ),
       ),
