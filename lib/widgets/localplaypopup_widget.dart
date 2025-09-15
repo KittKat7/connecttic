@@ -24,14 +24,14 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
           Row(
             children: [
               Expanded(flex: 4, child: Text(getLang('pmtPlayer', [0 + 1]))),
-              Expanded(flex: 1, child: Text(getLang('pmtAI')))
+              // Expanded(flex: 1, child: Text(getLang('pmtAI')))
             ],
           ),
           const SizedBox(height: 10),
           Row(
             children: [
               Expanded(flex: 4, child: Text(getLang('pmtPlayer', [1 + 1]))),
-              Expanded(flex: 1, child: Text(getLang('pmtAI')))
+              // Expanded(flex: 1, child: Text(getLang('pmtAI')))
             ],
           ),
         ],
@@ -61,6 +61,7 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
   /// username. This validation includes validating/censoring/cleaning and ensuring the username
   /// does not extend past the max length.
   /// TODO
+  // ignore: unused_element
   String _validateUsername(String iusername) {
     const int maxUsernameLength = 11;
     return iusername.length > maxUsernameLength

@@ -1,4 +1,3 @@
-import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
@@ -10,12 +9,20 @@ import '../models/pos.dart';
 /// This widget displays the game board.
 class GameBoard extends StatelessWidget {
   static const EmptyTile = SizedBox();
-  // TODO
-  static const BlockerTile = Icon(Icons.clear);
-  static const Player1Tile = Icon(Icons.circle_outlined);
-  static const Player2Tile = Icon(Icons.square_outlined);
-  static const Player1TileSup = Icon(Icons.circle);
-  static const Player2TileSup = Icon(Icons.square);
+  static final BlockerTile = Image.asset('assets/coins/cross_pixel.png',
+      filterQuality: FilterQuality.none);
+  static final Player1Tile =
+      Transform.scale(scale: 0.75, child: Player1TileSup);
+  static final Player2Tile =
+      Transform.scale(scale: 0.75, child: Player2TileSup);
+  static final Player1TileSup = ColorFiltered(
+      colorFilter: const ColorFilter.mode(Colors.red, BlendMode.modulate),
+      child: Image.asset('assets/coins/coin_pixel.png',
+          filterQuality: FilterQuality.none, fit: BoxFit.fill));
+  static final Player2TileSup = ColorFiltered(
+      colorFilter: const ColorFilter.mode(Colors.blue, BlendMode.modulate),
+      child: Image.asset('assets/coins/coin_pixel.png',
+          filterQuality: FilterQuality.none, fit: BoxFit.fill));
 
   /// The board which should be displayed.
   final GameManager gameManager;
@@ -34,7 +41,6 @@ class GameBoard extends StatelessWidget {
     // Create empty tile list
     List<Widget> displayList = List.filled(lx * ly, EmptyTile);
 
-    int a = 0;
     // Loop through the board to create the list
     for (int x = 0; x < lx; x++) {
       for (int y = 0; y < ly; y++) {

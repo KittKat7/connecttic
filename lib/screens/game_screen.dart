@@ -3,6 +3,7 @@ import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
+import '../models/game.dart';
 import '../widgets/gameboard_widget.dart';
 
 const double _textScale = 2;
@@ -26,11 +27,24 @@ class _GameScreenState extends State<GameScreen> {
     super.dispose();
   }
 
-  void onGameEnd() {
+  @override
+  void setState(Function() f) {
+    super.setState(f);
+    GameStatus status = GameManager.getGM().status;
+    if (status != GameStatus.playing && status != GameStatus.idle) {
+      String winner = '';
+      if (status == GameStatus.player1) winner = getLang('pmtPlayer', [1]);
+      if (status == GameStatus.player2) winner = getLang('pmtPlayer', [2]);
+      if (status == GameStatus.draw) winner = getLang('pmtDraw');
+      onGameEnd(winner);
+    }
+  }
+
+  void onGameEnd(String winner) {
     showDialog(
         context: context,
-        builder: (BuildContext context) => const GameEndPopup(
-              winnerUsername: "TODO",
+        builder: (BuildContext context) => GameEndPopup(
+              winnerUsername: winner,
               time: "TODO",
             ));
   }
@@ -38,12 +52,12 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     /// The widget display for the player usernames.
-    Widget player0Name = Text(
-      getLang('pmtPlayer', [0 + 1]),
+    Widget player1Name = Text(
+      getLang('pmtPlayer', [1]),
       textScaler: const TextScaler.linear(_textScale),
     );
-    Widget player1Name = Text(
-      getLang('pmtPlayer', [1 + 1]),
+    Widget player2Name = Text(
+      getLang('pmtPlayer', [2]),
       textScaler: const TextScaler.linear(_textScale),
     );
 
@@ -55,11 +69,19 @@ class _GameScreenState extends State<GameScreen> {
     /// The lower row which is displayed below the board.
     var row = Row(
       children: [
-        Expanded(flex: 2, child: player0Name),
-        // Expanded(flex: 1, child: player1Tile),
-        const Expanded(flex: 0, child: SizedBox()),
-        // Expanded(flex: 1, child: player2Tile),
         Expanded(flex: 2, child: player1Name),
+        Expanded(
+            flex: 1,
+            child: GameManager.getGM().currentPlayer == Game.p1
+                ? GameBoard.Player1TileSup
+                : GameBoard.Player1Tile),
+        const Expanded(flex: 0, child: SizedBox()),
+        Expanded(
+            flex: 1,
+            child: GameManager.getGM().currentPlayer == Game.p2
+                ? GameBoard.Player2TileSup
+                : GameBoard.Player2Tile),
+        Expanded(flex: 2, child: player2Name),
       ],
     );
 

@@ -20,6 +20,7 @@ class GameManager {
   int get height => game.board[0].length;
   int getItem(Pos pos) => game.board[pos.x][pos.y];
   int get currentPlayer => game.currentPlayer;
+  GameStatus get status => game.status;
 
   bool play(Pos pos) {
     if (game.status != GameStatus.playing) return false;
