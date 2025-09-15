@@ -1,46 +1,114 @@
+import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
 import '../models/audio_player.dart';
-import '../models/computer_player.dart';
 import '../models/game.dart';
-import '../models/game_object.dart';
-import '../models/player.dart';
+import '../models/game_manager.dart';
+import '../models/pos.dart';
 
 /// This widget displays the game board.
 class GameBoard extends StatelessWidget {
-  /// The board which should be displayed.
-  final Game game;
+  static const EmptyTile = SizedBox();
+  // TODO
+  static const BlockerTile = Icon(Icons.clear);
+  static const Player1Tile = Icon(Icons.circle_outlined);
+  static const Player2Tile = Icon(Icons.square_outlined);
+  static const Player1TileSup = Icon(Icons.circle);
+  static const Player2TileSup = Icon(Icons.square);
 
-  /// The function to run when tapped/clicked.
+  /// The board which should be displayed.
+  final GameManager gameManager;
+  final Function() changeCallback;
 
   /// Const constructor.
-  const GameBoard({super.key, required this.game});
+  const GameBoard(
+      {super.key, required this.gameManager, required this.changeCallback});
+
+  List<Widget> getWidgetList() {
+    // Length x of the board
+    int lx = gameManager.width;
+    // Length y of the board
+    int ly = gameManager.height;
+
+    // Create empty tile list
+    List<Widget> displayList = List.filled(lx * ly, EmptyTile);
+
+    int a = 0;
+    // Loop through the board to create the list
+    for (int x = 0; x < lx; x++) {
+      for (int y = 0; y < ly; y++) {
+        // Display list location
+        int dloc = lx * y + x;
+        // Get the item from the location on the board
+        int item = gameManager.getItem(Pos(x: x, y: y));
+
+        if (item == Game.empty) continue;
+
+        // What type of tile
+        if (item == Game.p1) {
+          // If player 1 tile
+          displayList[dloc] = Player1Tile;
+        } else if (item == Game.p2) {
+          // If player 2 tile
+          displayList[dloc] = Player2Tile;
+        } else if (item == Game.sup(gameManager.currentPlayer)) {
+          // Current player last player
+          displayList[dloc] = gameManager.currentPlayer == Game.p1
+              ? Player1TileSup
+              : Player2TileSup;
+          // If super tile for current player
+          for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+              // Temp location
+              int tloc = lx * (y + j) + (x + i);
+              // If the temp location is the current location
+              if ((i == 0 && j == 0) ||
+                  (x + i < 0 || x + i >= lx || y + j < 0 || y + j >= ly)) {
+                continue;
+              }
+              // If the temp location is empty, set it with a blocker
+              if (displayList[tloc] == EmptyTile) {
+                displayList[tloc] = BlockerTile;
+              }
+            }
+          }
+        } else if (item ==
+            Game.sup(
+                gameManager.currentPlayer == Game.p1 ? Game.p2 : Game.p1)) {
+          displayList[dloc] = gameManager.currentPlayer == Game.p1
+              ? Player2TileSup
+              : Player1TileSup;
+        }
+        // Else, don't do anything, already empty tile
+      }
+    }
+    return displayList;
+  }
 
   @override
   Widget build(BuildContext context) {
     // List of all widgets on the board.
+    List<Widget> tlist = getWidgetList();
     List<Widget> boardWidgetList = [];
-    // For every x and every y, add the tile to the list witht he correct widget and onTap function.
-    for (int h = 0; h < game.board.height; h++) {
-      for (int w = 0; w < game.board.width; w++) {
-        boardWidgetList.add(
-          _BoardTile(
-            tile: getTileWidget(w, h),
-            onTap: () => play(w, h),
-          ),
-        );
-      }
+    for (int i = 0; i < tlist.length; i++) {
+      boardWidgetList.add(_BoardTile(
+        onTap: () => play(
+            (i % gameManager.width).toInt(), (i / gameManager.width).toInt()),
+        tile: tlist[i],
+      ));
     }
+
     // Return the widget.
     return Padding(
       padding: const EdgeInsets.all(1.0),
       child: Container(
-        decoration:
-            BoxDecoration(border: Border.all(color: colorScheme(context).onSecondary, width: 4)),
+        decoration: BoxDecoration(
+            border:
+                Border.all(color: colorScheme(context).onSecondary, width: 4)),
         child: GridView.count(
           shrinkWrap: true,
-          crossAxisCount: game.board.width,
+          crossAxisCount: gameManager.width,
           childAspectRatio: 1.0,
           children: boardWidgetList,
         ),
@@ -49,25 +117,11 @@ class GameBoard extends StatelessWidget {
   }
 
   void play(x, y) {
-    // TODO BUG: audio only plays when user is playing, not when computer is
-    // playing
-    if (game.getCurrentPlayer() is! ComputerPlayer) {
-      if (game.play(x, y)) AppAudio.getInstance().playEffect(AppAudio.effectPop);
+    if (gameManager.play(Pos(x: x, y: y))) {
+      AppAudio.getInstance().playEffect(AppAudio.effectPop);
+      changeCallback();
     }
   }
-
-  Widget getTileWidget(int x, int y) {
-    if (game.board.tileIsEmpty(x, y)) return const SizedBox();
-    if (game.board.tileIsBlocker(x, y)) return BlockerObject().getTile();
-    Player player = game.getPlayerAtPosition(x, y);
-    if (player.lastx == x && player.lasty == y) return player.getBigTile();
-    for (int i = 0; i < 4 && game.winset != null; i++) {
-      if (game.winset![i][0] == x && game.winset![i][1] == y) return player.getBigTile();
-    }
-    return player.getTile();
-  }
-  // @override
-  // State<GameBoard> createState() => _GameBoardState();
 }
 
 /// Private class for tiles on the board.
@@ -97,7 +151,7 @@ class _BoardTile extends StatelessWidget {
                 width: double.infinity,
                 filterQuality: FilterQuality.none,
               )),
-          tile,
+          SizedBox.expand(child: FittedBox(child: tile))
         ],
       ),
       onTapInside: (event) => onTap(),

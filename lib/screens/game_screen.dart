@@ -1,64 +1,42 @@
-import 'dart:async';
-
-import 'package:connecttic/models/game_object.dart';
+import 'package:connecttic/models/game_manager.dart';
 import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
-import '../models/game.dart';
-import '../models/player.dart';
 import '../widgets/gameboard_widget.dart';
 
 const double _textScale = 2;
 
 /// This screen displays the game board and is how the player interacts with the game.
 class GameScreen extends StatefulWidget {
-  final Game game;
-  const GameScreen({super.key, required this.game});
+  const GameScreen({super.key});
 
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
 
 class _GameScreenState extends State<GameScreen> {
-  int gameTime = 0;
-  late Timer timer;
-
   @override
   void initState() {
     super.initState();
-    // When initing state, set the onCallBack function in the game to launch the end game popup.
-    timer = Timer.periodic(const Duration(seconds: 1), (t) => setState(() => gameTime++));
-    widget.game.setOnEndCallback(onGameEnd);
-    widget.game.setOnUpdateBoard(() => setState(() {}));
   }
 
   @override
   void dispose() {
     super.dispose();
-    timer.cancel();
-    widget.game.dispose();
   }
 
   void onGameEnd() {
-    Map<String, String> gameInfo = widget.game.getGameInfo();
-    timer.cancel();
     showDialog(
         context: context,
-        builder: (BuildContext context) => GameEndPopup(
-              winnerUsername: gameInfo["winner"]!,
-              time: gameInfo["time"]!,
+        builder: (BuildContext context) => const GameEndPopup(
+              winnerUsername: "TODO",
+              time: "TODO",
             ));
   }
 
   @override
   Widget build(BuildContext context) {
-    BlockerObject.setColor(colorScheme(context).primary);
-
-    /// Player 0 and 1 in the game.
-    Player player1 = widget.game.players.get(1);
-    Player player2 = widget.game.players.get(2);
-
     /// The widget display for the player usernames.
     Widget player0Name = Text(
       getLang('pmtPlayer', [0 + 1]),
@@ -69,40 +47,18 @@ class _GameScreenState extends State<GameScreen> {
       textScaler: const TextScaler.linear(_textScale),
     );
 
-    /// Tiles/widgets for the players.
-    Widget player1Tile = player1.getTile();
-    Widget player2Tile = player2.getTile();
-    // If the player is the current player, use the big tile.
-    if (widget.game.getCurrentPlayer() == player1) {
-      player1Tile = player1.getBigTile();
-    } else {
-      player2Tile = player2.getBigTile();
-    }
-
-    // /// Listens to the time on the game timer. When the time updates, return a new Text widget which
-    // /// displays the updated time.
-    // var valueListenableBuilder = ValueListenableBuilder<int>(
-    //     valueListenable: widget.game.timeNotifier,
-    //     builder: (context, seconds, child) {
-    //       return     //     });
-    var gameTimeDisplay = Text(
-      getLang('mscMinSec', [
-        (gameTime ~/ 60).toString().padLeft(2, '0'),
-        (gameTime % 60).toString().padLeft(2, '0')
-      ]),
-      textScaler: const TextScaler.linear(_textScale),
-    );
-
     /// The widget which displays the current game board.
-    var gameBoard = GameBoard(game: widget.game);
+    var gameBoard = GameBoard(
+        gameManager: GameManager.getGM(),
+        changeCallback: () => setState(() {}));
 
     /// The lower row which is displayed below the board.
     var row = Row(
       children: [
         Expanded(flex: 2, child: player0Name),
-        Expanded(flex: 1, child: player1Tile),
+        // Expanded(flex: 1, child: player1Tile),
         const Expanded(flex: 0, child: SizedBox()),
-        Expanded(flex: 1, child: player2Tile),
+        // Expanded(flex: 1, child: player2Tile),
         Expanded(flex: 2, child: player1Name),
       ],
     );
@@ -119,7 +75,7 @@ class _GameScreenState extends State<GameScreen> {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [gameTimeDisplay, gameBoard, row],
+            children: [gameBoard, row],
           ),
         ),
       ),

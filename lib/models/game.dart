@@ -49,7 +49,7 @@ class Game {
         status = GameStatus.values[json['status']];
 
   // Validation check to make sure the given position is in bounds of the board
-  bool _isInBounds(Pos pos) {
+  bool isInBounds(Pos pos) {
     int x = pos.x;
     int y = pos.y;
     // Out of bounds - return false
@@ -63,7 +63,7 @@ class Game {
   /// otherwise
   bool isPlayable(Pos pos) {
     // Out of bounds check
-    if (!_isInBounds(pos)) return false;
+    if (!isInBounds(pos)) return false;
     int x = pos.x;
     int y = pos.y;
     // Location is not empty
@@ -76,7 +76,7 @@ class Game {
         // If current tile, continue
         if (i == 0 && j == 0) continue;
         // If the adjacent tile is the super version
-        if (_isInBounds(Pos(x: x + i, y: y + j)) &&
+        if (isInBounds(Pos(x: x + i, y: y + j)) &&
             board[x + i][y + j] == sup(currentPlayer)) {
           return false;
         }
@@ -143,7 +143,7 @@ class Game {
     int y = pos.y;
     // Boundary check for starting, and make sure starting is actually a player
     // tile
-    if (!_isInBounds(pos) || board[x][y] == empty) return false;
+    if (!isInBounds(pos) || board[x][y] == empty) return false;
     // For every item in the row/col/diag of 4
     for (int i = 1; i < 4; i++) {
       // Set the check x and check y values
@@ -151,7 +151,7 @@ class Game {
       int cy = y + dy * i;
       // If cx,cy is out of bounds, or cx,cy is not the same player as x,y then
       // its not four in a row, return false
-      if (!_isInBounds(Pos(x: cx, y: cy)) ||
+      if (!isInBounds(Pos(x: cx, y: cy)) ||
           sub(board[x][y]) != sub(board[cx][cy])) {
         return false;
       }
@@ -183,6 +183,7 @@ class Game {
   bool play(Pos pos) {
     // Check if game is in playing status
     if (status != GameStatus.playing) return false;
+
     // Check if the given tile is playable
     if (!isPlayable(pos)) return false;
 
@@ -193,7 +194,7 @@ class Game {
     board[pos.x][pos.y] = sup(currentPlayer);
 
     // Cycle player
-    currentPlayer = (currentPlayer + 1) % 2;
+    currentPlayer = (currentPlayer % 2) + 1;
 
     // Update the game status/check for a win/end condition
     updateStatus();

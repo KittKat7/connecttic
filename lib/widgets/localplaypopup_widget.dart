@@ -1,11 +1,7 @@
-import 'package:connecttic/models/board.dart';
-import 'package:connecttic/models/game.dart';
-import 'package:connecttic/models/player.dart';
+import 'package:connecttic/models/game_manager.dart';
 import 'package:connecttic/screens/game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
-
-import '../models/computer_player.dart';
 
 /// This widget is used to set up the players and board for a local play game.
 class LocalPlayPopup extends StatefulWidget {
@@ -18,29 +14,8 @@ class LocalPlayPopup extends StatefulWidget {
 class _LocalPlayPopupState extends State<LocalPlayPopup> {
   List<int> ai = [0, 1];
 
-  List<DropdownMenuItem<String>> cpuLevels =
-      ComputerPlayer.computerLevels.map<DropdownMenuItem<String>>((String value) {
-    return DropdownMenuItem(value: value, child: Text(value));
-  }).toList();
-
   @override
   Widget build(BuildContext context) {
-    // Widgets for entry fields or checkboxes
-    var ai0Checkbox = Expanded(
-        flex: 1,
-        child: DropdownButton<String>(
-          value: ComputerPlayer.computerLevels[ai[0]],
-          items: cpuLevels,
-          onChanged: (str) => setState(() => ai[0] = ComputerPlayer.computerLevels.indexOf(str!)),
-        ));
-    var ai1Checkbox = Expanded(
-        flex: 1,
-        child: DropdownButton<String>(
-          value: ComputerPlayer.computerLevels[ai[1]],
-          items: cpuLevels,
-          onChanged: (str) => setState(() => ai[1] = ComputerPlayer.computerLevels.indexOf(str!)),
-        ));
-
     return AlertDialog(
       title: Text(getLang('titleSetupGame')),
       content: Column(
@@ -52,9 +27,6 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
               Expanded(flex: 1, child: Text(getLang('pmtAI')))
             ],
           ),
-          Row(
-            children: [ai0Checkbox],
-          ),
           const SizedBox(height: 10),
           Row(
             children: [
@@ -62,13 +34,12 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
               Expanded(flex: 1, child: Text(getLang('pmtAI')))
             ],
           ),
-          Row(
-            children: [ai1Checkbox],
-          ),
         ],
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text(getLang('btnCancel'))),
+        TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(getLang('btnCancel'))),
         TextButton(
             onPressed: () {
               _onConfirmBtnPress(context);
@@ -82,79 +53,18 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
   /// stack and pushed the [GameScreen] onto the stack.
   void _onConfirmBtnPress(BuildContext context) {
     Navigator.pop(context);
-    Navigator.push(
-        context,
-        genRoute(GameScreen(
-          game: Game(
-            Board(),
-            PlayerList.fromList(_playerList),
-          ),
-        )));
+    GameManager.gm = GameManager(GameType.local);
+    Navigator.push(context, genRoute(const GameScreen()));
   }
 
   /// _validateUsername validates a provided username [iusername] and returns the validated
   /// username. This validation includes validating/censoring/cleaning and ensuring the username
   /// does not extend past the max length.
+  /// TODO
   String _validateUsername(String iusername) {
     const int maxUsernameLength = 11;
     return iusername.length > maxUsernameLength
         ? iusername.substring(0, maxUsernameLength)
         : iusername;
-  }
-
-  /// get _playerList returns a list of the players for the game. If the AI option is checked for a
-  /// specific player, that player will be a computer player, otherwise it will be a user player.
-  List<Player> get _playerList {
-    // The computer and non computer player for player 0
-    var computerPlayer0 = ComputerPlayer(
-      Image.asset(
-        'assets/coins/coin_pixel.png',
-        fit: BoxFit.cover,
-        filterQuality: FilterQuality.none,
-        width: double.infinity,
-      ),
-      Colors.red,
-    );
-
-    var player0 = Player(
-      Image.asset(
-        'assets/coins/coin_pixel.png',
-        fit: BoxFit.cover,
-        filterQuality: FilterQuality.none,
-        width: double.infinity,
-      ),
-      Colors.red,
-    );
-
-    // The computer and non computer player for player 1
-    var computerPlayer1 = ComputerPlayer(
-      Image.asset(
-        'assets/coins/coin_pixel.png',
-        fit: BoxFit.cover,
-        filterQuality: FilterQuality.none,
-        width: double.infinity,
-      ),
-      Colors.blue,
-    );
-
-    var player1 = Player(
-      Image.asset(
-        'assets/coins/coin_pixel.png',
-        fit: BoxFit.cover,
-        filterQuality: FilterQuality.none,
-        width: double.infinity,
-      ),
-      Colors.blue,
-    );
-
-    computerPlayer0.level = ai[0];
-    computerPlayer1.level = ai[1];
-
-    // Returns a list of player 0 and player 1. Returns the computer player if needed, otherwise the
-    // non computer players.
-    return [
-      ai[0] > 0 ? computerPlayer0 : player0,
-      ai[1] > 0 ? computerPlayer1 : player1,
-    ];
   }
 }
