@@ -33,15 +33,6 @@ class ModeSelectScreen extends StatelessWidget {
                 text: getLang('btnOnlinePlay'),
                 onPressed: () {},
               ),
-              // const SizedBox(height: 10),
-              // ElevatedButton(
-              //   style: ElevatedButton.styleFrom(
-              //     minimumSize: Size.fromHeight(40),
-              //   ),
-              //   onPressed: () =>
-              //       Navigator.push(context, genRoute(AboutScreen())),
-              //   child: Marked(getLang('btnAbout')),
-              // ),
             ],
           ),
         ),

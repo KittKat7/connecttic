@@ -1,5 +1,7 @@
+import 'package:connecttic/models/player.dart';
 import 'package:connecttic/models/game_manager.dart';
 import 'package:connecttic/screens/game_screen.dart';
+import 'package:connecttic/widgets/select_player_level.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
@@ -12,7 +14,8 @@ class LocalPlayPopup extends StatefulWidget {
 }
 
 class _LocalPlayPopupState extends State<LocalPlayPopup> {
-  List<int> ai = [0, 1];
+  Player p1 = Player(level: PlayerLevel.player);
+  Player p2 = Player(level: PlayerLevel.player);
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +26,17 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
         children: [
           Row(
             children: [
-              Expanded(flex: 4, child: Text(getLang('pmtPlayer', [0 + 1]))),
-              // Expanded(flex: 1, child: Text(getLang('pmtAI')))
+              Text(getLang('pmtPlayer', [0 + 1])),
             ],
           ),
+          SelectPlayerLevel(player: p1),
           const SizedBox(height: 10),
           Row(
             children: [
-              Expanded(flex: 4, child: Text(getLang('pmtPlayer', [1 + 1]))),
-              // Expanded(flex: 1, child: Text(getLang('pmtAI')))
+              Text(getLang('pmtPlayer', [1 + 1])),
             ],
           ),
+          SelectPlayerLevel(player: p2),
         ],
       ),
       actions: [
@@ -53,7 +56,11 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
   /// stack and pushed the [GameScreen] onto the stack.
   void _onConfirmBtnPress(BuildContext context) {
     Navigator.pop(context);
-    GameManager.gm = GameManager(GameType.local);
+    GameManager.gm = GameManager(
+      GameType.local,
+      player1: p1,
+      player2: p2,
+    );
     Navigator.push(context, genRoute(const GameScreen()));
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
-import '../models/audio_player.dart';
 import '../models/game.dart';
 import '../models/game_manager.dart';
 import '../models/pos.dart';
@@ -26,11 +25,10 @@ class GameBoard extends StatelessWidget {
 
   /// The board which should be displayed.
   final GameManager gameManager;
-  final Function() changeCallback;
 
   /// Const constructor.
   const GameBoard(
-      {super.key, required this.gameManager, required this.changeCallback});
+      {super.key, required this.gameManager});
 
   List<Widget> getWidgetList() {
     // Length x of the board
@@ -123,10 +121,7 @@ class GameBoard extends StatelessWidget {
   }
 
   void play(x, y) {
-    if (gameManager.play(Pos(x: x, y: y))) {
-      AppAudio.getInstance().playEffect(AppAudio.effectPop);
-      changeCallback();
-    }
+    gameManager.play(Pos(x: x, y: y));
   }
 }
 

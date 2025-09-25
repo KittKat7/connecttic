@@ -194,12 +194,16 @@ class Game {
     board[pos.x][pos.y] = sup(currentPlayer);
 
     // Cycle player
-    currentPlayer = (currentPlayer % 2) + 1;
+    currentPlayer = nextPlayer();
 
     // Update the game status/check for a win/end condition
     updateStatus();
 
     // Return true, the play was a success
     return true;
+  }
+
+  int nextPlayer() {
+    return (currentPlayer % 2) + 1;
   }
 }

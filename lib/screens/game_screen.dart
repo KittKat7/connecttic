@@ -3,6 +3,7 @@ import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
+import '../models/audio_player.dart';
 import '../models/game.dart';
 import '../widgets/gameboard_widget.dart';
 
@@ -63,8 +64,12 @@ class _GameScreenState extends State<GameScreen> {
 
     /// The widget which displays the current game board.
     var gameBoard = GameBoard(
-        gameManager: GameManager.getGM(),
-        changeCallback: () => setState(() {}));
+        gameManager: GameManager.getGM());
+
+    GameManager.getGM().updateCallback = () {
+      AppAudio.getInstance().playEffect(AppAudio.effectPop);
+      setState((){});
+    };
 
     /// The lower row which is displayed below the board.
     var row = Row(
