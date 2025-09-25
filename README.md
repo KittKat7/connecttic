@@ -14,6 +14,8 @@ A mix between the classic Connect 4 and Tic-Tac-Toe
 
 ## Dev
 
+run server with: `dart run lib/server/server.dart`
+
 ```mermaid
 ---
 title: ConnectTic UML
