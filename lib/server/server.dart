@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connecttic/server/server_defs.dart';
 import 'package:connecttic/server/server_helpers.dart';
 
 import '../models/game.dart';
@@ -44,7 +45,7 @@ Future<void> handleRequest(HttpRequest request) async {
         throw Exception();
       }
     } catch (e) {
-      ReqError(HttpStatus.badRequest, '{"error": "Invalid Json body"}');
+      ReqError(ServerDefs.codeAppErr, '{"error": "Invalid Json body"}');
     }
 
     int code = 500;
@@ -58,29 +59,36 @@ Future<void> handleRequest(HttpRequest request) async {
       case 'coffee':
         throw ReqError(418, 'I\'m a teapot');
 
-      // CREATE
-      case 'create':
+      case 'list':
+        String str = ':';
+        for (String a in gameList.map.keys) {
+          str += '$a:';
+        }
+        throw ReqError(200, str);
+
+      // NEW
+      case ServerDefs.reqNew:
         ServerGame sg = gameList.newGame();
-        code = HttpStatus.ok;
+        code = ServerDefs.codeSucc;
         message = '{"hash": "${sg.hash}", "user": "${sg.user1}"}';
         break;
 
       // JOIN
-      case 'join':
+      case ServerDefs.reqJoin:
         if (!content.containsKey('hash')) {
-          throw ReqError(HttpStatus.badRequest, 'missing game');
+          throw ReqError(ServerDefs.codeAppErr, 'missing hash');
         }
 
         String hash = content['hash'];
 
         if (!gameList.contains(hash)) {
-          throw ReqError(HttpStatus.badRequest, 'invalid game key');
+          throw ReqError(ServerDefs.codeUsrErr, 'invalid game key');
         }
 
         ServerGame sg = gameList.get(hash)!;
 
         if (sg.user2 != null) {
-          throw ReqError(HttpStatus.badRequest, 'game is full');
+          throw ReqError(ServerDefs.codeUsrErr, 'game is full');
         }
 
         String p2Hash = generateHashCode(dateTimeNowStr(), 4);
@@ -90,51 +98,51 @@ Future<void> handleRequest(HttpRequest request) async {
 
         sg.user2 = p2Hash;
 
-        code = HttpStatus.ok;
+        code = ServerDefs.codeSucc;
         message = '{"user": "$p2Hash"}';
 
         break;
 
-      // GET UPDATE
-      case 'play':
+      // PLAY
+      case ServerDefs.reqPlay:
         if (!content.containsKey('hash')) {
-          throw ReqError(HttpStatus.badRequest, 'missing game');
+          throw ReqError(ServerDefs.codeAppErr, 'missing hash');
         }
 
         String hash = content['hash'];
 
         if (!content.containsKey('user')) {
-          throw ReqError(HttpStatus.badRequest, 'missing user');
+          throw ReqError(ServerDefs.codeAppErr, 'missing user');
         }
 
         String user = content['user'];
 
         if (!content.containsKey('pos')) {
-          throw ReqError(HttpStatus.badRequest, 'missing position');
+          throw ReqError(ServerDefs.codeAppErr, 'missing position');
         }
 
         Pos pos = Pos.fromJson(content['pos']);
 
         if (!gameList.contains(hash)) {
-          throw ReqError(HttpStatus.badGateway, 'invalid game key');
+          throw ReqError(ServerDefs.codeUsrErr, 'invalid game key');
         }
 
         ServerGame sg = gameList.get(hash)!;
 
         if (user != sg.user1 && user != sg.user2) {
           throw ReqError(
-              HttpStatus.badRequest, '{"error": "user not in game"}');
+              ServerDefs.codeAppErr, '{"error": "user not in game"}');
         }
 
-        if ((user == sg.user1 && sg.gm.currentPlayer != Game.p1) ||
-            (user == sg.user2 && sg.gm.currentPlayer != Game.p2)) {
-          throw ReqError(HttpStatus.unauthorized, 'not your turn');
+        if ((user == sg.user1 && sg.gm.currentPlayer == Game.p1) ||
+            (user == sg.user2 && sg.gm.currentPlayer == Game.p2)) {
+          gameList.get(hash)!.gm.play(pos);
         }
 
-        gameList.get(hash)!.gm.play(pos);
-
-        code = 200;
+        code = ServerDefs.codeSucc;
         message = '{"hash": $hash, "game": ${sg.gm.game.toJson()}}';
+
+        break;
 
       default:
         throw Object();

@@ -1,8 +1,10 @@
 import 'package:connecttic/widgets/localplaypopup_widget.dart';
+import 'package:connecttic/widgets/remote_play_new_popup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
 import '../widgets/button_widget.dart';
+import '../widgets/remote_play_join_popup_widget.dart';
 
 class ModeSelectScreen extends StatelessWidget {
   const ModeSelectScreen({super.key});
@@ -30,8 +32,19 @@ class ModeSelectScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               StyledButton(
-                text: getLang('btnOnlinePlay'),
-                onPressed: () {},
+                text: getLang('btnRemoteNew'),
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        const RemotePlayNewPopup()),
+              ),
+              const SizedBox(height: 10),
+              StyledButton(
+                text: getLang('btnRemoteJoin'),
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        const RemotePlayJoinPopup()),
               ),
             ],
           ),

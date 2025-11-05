@@ -12,7 +12,8 @@ const Map<String, String> en_us = {
   "btnHelp": "Help/Rules",
   "btnAbout": "About",
   "btnLocalPlay": "Local Play",
-  "btnOnlinePlay": "(NOT IMPLEMENTED)",
+  "btnRemoteJoin": "Join Remote Game",
+  "btnRemoteNew": "New Remote Game",
   "btnCancel": "Cancel",
   "btnConfirm": "Confirm",
   "btnContinue": "Continue",
@@ -26,6 +27,7 @@ const Map<String, String> en_us = {
   "pmtDraw": "Draw",
   "pmtCpuLvl0": "User",
   "pmtCpuLvl1": "Computer Easy",
+  "pmtGameCode": "Game Code",
   // Text
   "txtHelp": """
 ## How to play

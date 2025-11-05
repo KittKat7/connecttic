@@ -54,21 +54,20 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     /// The widget display for the player usernames.
     Widget player1Name = Text(
-      getLang('pmtPlayer', [1]),
+      GameManager.getGM().player1.playerId,
       textScaler: const TextScaler.linear(_textScale),
     );
     Widget player2Name = Text(
-      getLang('pmtPlayer', [2]),
+      GameManager.getGM().player2.playerId,
       textScaler: const TextScaler.linear(_textScale),
     );
 
     /// The widget which displays the current game board.
-    var gameBoard = GameBoard(
-        gameManager: GameManager.getGM());
+    var gameBoard = GameBoard(gameManager: GameManager.getGM());
 
     GameManager.getGM().updateCallback = () {
       AppAudio.getInstance().playEffect(AppAudio.effectPop);
-      setState((){});
+      setState(() {});
     };
 
     /// The lower row which is displayed below the board.
