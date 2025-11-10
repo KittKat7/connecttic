@@ -8,7 +8,7 @@ import 'pos.dart';
 enum PlayerLevel { player, cpu1, cpu2, cpu3 }
 
 class Player {
-  String playerId = '';
+  String? playerId;
   PlayerLevel level;
 
   Player({required this.level});

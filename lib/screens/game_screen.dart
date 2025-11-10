@@ -31,7 +31,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void setState(Function() f) {
     super.setState(f);
-    GameStatus status = GameManager.getGM().status;
+    GameStatus status = GameManager.getGM.status;
     if (status != GameStatus.playing && status != GameStatus.idle) {
       String winner = '';
       if (status == GameStatus.player1) winner = getLang('pmtPlayer', [1]);
@@ -54,20 +54,26 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     /// The widget display for the player usernames.
     Widget player1Name = Text(
-      GameManager.getGM().player1.playerId,
+      GameManager.getGM.player1.playerId ?? GameManager.getGM.game.player1Name,
       textScaler: const TextScaler.linear(_textScale),
     );
     Widget player2Name = Text(
-      GameManager.getGM().player2.playerId,
+      GameManager.getGM.player2.playerId ?? GameManager.getGM.game.player2Name,
       textScaler: const TextScaler.linear(_textScale),
     );
 
-    /// The widget which displays the current game board.
-    var gameBoard = GameBoard(gameManager: GameManager.getGM());
+    var gameHeader = Text(
+      '${GameManager.getGM.type.name[0].toUpperCase() + GameManager.getGM.type.name.substring(1)}: ${GameManager.getGM.gameId ?? ''}',
+      textScaler: const TextScaler.linear(2),
+    );
 
-    GameManager.getGM().updateCallback = () {
+    /// The widget which displays the current game board.
+    var gameBoard = GameBoard(gameManager: GameManager.getGM);
+
+    GameManager.getGM.updateCallback = () {
       AppAudio.getInstance().playEffect(AppAudio.effectPop);
       setState(() {});
+      print("udated");
     };
 
     /// The lower row which is displayed below the board.
@@ -76,13 +82,13 @@ class _GameScreenState extends State<GameScreen> {
         Expanded(flex: 2, child: player1Name),
         Expanded(
             flex: 1,
-            child: GameManager.getGM().currentPlayer == Game.p1
+            child: GameManager.getGM.currentPlayer == Game.p1
                 ? GameBoard.Player1TileSup
                 : GameBoard.Player1Tile),
         const Expanded(flex: 0, child: SizedBox()),
         Expanded(
             flex: 1,
-            child: GameManager.getGM().currentPlayer == Game.p2
+            child: GameManager.getGM.currentPlayer == Game.p2
                 ? GameBoard.Player2TileSup
                 : GameBoard.Player2Tile),
         Expanded(flex: 2, child: player2Name),
@@ -101,7 +107,7 @@ class _GameScreenState extends State<GameScreen> {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [gameBoard, row],
+            children: [gameHeader, gameBoard, row],
           ),
         ),
       ),

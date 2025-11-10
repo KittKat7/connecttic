@@ -29,6 +29,9 @@ class Game {
   /// Game status
   GameStatus status;
 
+  String player1Name = '';
+  String player2Name = '';
+
   /// Constructor
   Game({int width = 7, int height = 6})
       : board = List.generate(width, (_) => List.filled(height, 0)),
@@ -40,13 +43,19 @@ class Game {
         'board': board,
         'currentPlayer': currentPlayer,
         'status': status.index,
+        'p1n': player1Name,
+        'p2n': player2Name,
       };
 
-  /// Returns a game from a json map
+  // From json
   Game.fromJson(Map<String, dynamic> json)
-      : board = json['board'],
+      : board = (json['board'] as List<dynamic>).map<List<int>>((item) {
+          return (item as List<dynamic>).map<int>((e) => e as int).toList();
+        }).toList(),
         currentPlayer = json['currentPlayer'],
-        status = GameStatus.values[json['status']];
+        status = GameStatus.values[json['status']],
+        player1Name = json['p1n'],
+        player2Name = json['p2n'];
 
   // Validation check to make sure the given position is in bounds of the board
   bool isInBounds(Pos pos) {

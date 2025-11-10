@@ -1,7 +1,6 @@
 import 'package:connecttic/models/player.dart';
 import 'package:connecttic/models/game_manager.dart';
 import 'package:connecttic/screens/game_screen.dart';
-import 'package:connecttic/widgets/select_player_level.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 

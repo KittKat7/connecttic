@@ -1,19 +1,25 @@
 import 'dart:convert';
+// import 'dart:io';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:connecttic/server/server_defs.dart';
-// import 'package:flutter/foundation.dart';
 
 import 'player.dart';
 import 'game.dart';
 import 'pos.dart';
 
+/// [GameType] the type of game, either local or remote
 enum GameType { local, remote }
 
+/// Handles game management locally. Also handles connecting to servers if
+/// playing remotely. This is also a singleton class.
 class GameManager {
+  /// The instance of [GameManager]
   static GameManager? gm;
 
-  static GameManager getGM() {
+  /// Return the [GameManager] instance
+  static GameManager get getGM {
     return gm!;
   }
 
@@ -32,10 +38,68 @@ class GameManager {
         response['status'] != 200) {
       callbackError();
     } else {
-      GameManager.getGM().player1.playerId = response['user'];
+      getGM.player1.playerId = response['user'];
+      getGM.uHash = response['user'];
+      getGM.gameId = response['hash'];
+      getGM.hash = response['hash'];
       callbackSuccess();
+      remoteUpdate();
     }
     return response;
+  }
+
+  /// Sends a request to create a remote game
+  static Future<Map> joinRemoteGame(
+      String hash, Function callbackSuccess, Function callbackError) async {
+    GameManager.gm = GameManager(
+      GameType.remote,
+      player1: Player(level: PlayerLevel.player),
+      player2: Player(level: PlayerLevel.player),
+    );
+
+    Map response = await postData(ServerDefs.reqJoin, {"hash": hash});
+    if (response.keys.contains('error') ||
+        !response.keys.contains('status') ||
+        response['status'] != 200) {
+      callbackError();
+    } else {
+      getGM.player2.playerId = response['user'];
+      getGM.uHash = response['user'];
+      getGM.gameId = response['hash'];
+      getGM.hash = response['hash'];
+      callbackSuccess();
+      remoteUpdate();
+    }
+    return response;
+  }
+
+  // TODO add a remote update call
+  static Future<void> remoteUpdate({bool repeat = true}) async {
+    print("Hello!!");
+    if (getGM.game.status == GameStatus.draw ||
+        getGM.game.status == GameStatus.player1 ||
+        getGM.game.status == GameStatus.player2) {
+      return;
+    }
+    // If the game exists, and the status is playing or idle, init a 3 second
+    // loop for getting
+    if (gm != null &&
+        (getGM.game.status == GameStatus.idle ||
+            getGM.game.status == GameStatus.playing)) {
+      Map response = await postData(ServerDefs.reqGet, {"hash": getGM.gameId});
+      if (response.containsKey('error') ||
+          !response.containsKey('status') ||
+          response['status'] != 200) {
+        // TODO error
+        // TODO Add a error popup widget?
+        print("ERROR");
+      } else {
+        getGM.game = Game.fromJson(response['game']);
+      }
+    }
+    getGM.callUpdateCallback();
+    // Run the callback
+    if (repeat) Timer(const Duration(seconds: 3), remoteUpdate);
   }
 
   Game game;
@@ -48,6 +112,7 @@ class GameManager {
   GameStatus get status => game.status;
   Player player1;
   Player player2;
+  String? gameId;
 
   // Remote specific vars
   /// The hash for the remote game
@@ -97,6 +162,10 @@ class GameManager {
           nPlayer.computerPlay(this);
         });
       }
+    } else if (type == GameType.remote) {
+      print(pos);
+      postData(ServerDefs.reqPlay, {"hash": gameId, "user": uHash, "pos": pos})
+          .then((f) => remoteUpdate(repeat: false));
     }
 
     if (played) {
@@ -120,9 +189,13 @@ class GameManager {
 /// Makes a post request to the server. Takes [req] the request and the content
 /// [content] and returns a Future<Map> with the json data from the response.
 Future<Map> postData(String req, Map content) async {
+  // If the game is running in release mode, use the prod url, otherwise use
+  // localhost
+  // TODO FIX Platform.environment does not work on web
   final url = Platform.environment['FLUTTER_ENV'] == 'release'
       ? ''
       : 'http://localhost:8080';
+  // final url = 'http://localhost:8080';
   final httpClient = HttpClient();
 
   /// The json response to return
@@ -143,17 +216,17 @@ Future<Map> postData(String req, Map content) async {
 
     // Good response
     if (response.statusCode == 200) {
-      print('Response data: $responseBody');
+      // print('Response data: $responseBody');
     }
     // Not good response
     else {
-      print('Request failed with status: ${response.statusCode}.');
-      print('Response data: $responseBody');
+      // print('Request failed with status: ${response.statusCode}.');
+      // print('Response data: $responseBody');
     }
     // Build the response json
     responseJson = jsonDecode(responseBody) ?? {};
     responseJson['status'] = response.statusCode;
-    print(responseJson);
+    // print(responseJson);
   } catch (e) {
     // If there is an error, print the error and return it
     print('Error: $e');

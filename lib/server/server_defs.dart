@@ -13,6 +13,10 @@ class ServerDefs {
   /// "USER", "pos": POS}` and returns `{"hash": "HASH", "game": GAME}`
   static const String reqPlay = 'play';
 
+  /// Requests to get the current game status, required data `{"hash": "HASH"}`
+  /// and returns `{"hash": "HASH", "game": GAME}`
+  static const String reqGet = 'get';
+
   static const int codeSucc = HttpStatus.ok;
   static const int codeAppErr = HttpStatus.badRequest;
   static const int codeUsrErr = HttpStatus.notFound;

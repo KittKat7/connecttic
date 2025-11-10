@@ -1,0 +1,1 @@
+dart run ./lib/server/server.dart

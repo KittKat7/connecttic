@@ -18,24 +18,11 @@ class _RemotePlayJoinPopupState extends State<RemotePlayJoinPopup> {
 
   @override
   Widget build(BuildContext context) {
-    String hash = "";
     return AlertDialog(
       title: Text(getLang('titleSetupGame')),
-      content: Column(
+      content: const Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  onChanged: (value) => hash = value,
-                  decoration: InputDecoration(hintText: getLang('pmtGameCode')),
-                ),
-              ),
-            ],
-          ),
-        ],
+        children: [Text("TODO: ERROR")],
       ),
       actions: [
         TextButton(
@@ -43,7 +30,7 @@ class _RemotePlayJoinPopupState extends State<RemotePlayJoinPopup> {
             child: Text(getLang('btnCancel'))),
         TextButton(
             onPressed: () {
-              _onConfirmBtnPress(context, hash);
+              _onConfirmBtnPress(context);
             },
             child: Text(getLang('btnConfirm'))),
       ],
@@ -52,16 +39,14 @@ class _RemotePlayJoinPopupState extends State<RemotePlayJoinPopup> {
 
   /// [_onConfirmBtnPress] runs when the confirm btn is pressed. This method pops the popup off the
   /// stack and pushed the [GameScreen] onto the stack.
-  void _onConfirmBtnPress(BuildContext context, String hash) {
+  void _onConfirmBtnPress(BuildContext context) {
     Navigator.pop(context);
-
     GameManager.gm = GameManager(
       GameType.local,
       player1: p1,
       player2: p2,
     );
-    GameManager.joinRemoteGame(hash,
-        () => Navigator.push(context, genRoute(const GameScreen())), () {});
+    Navigator.push(context, genRoute(const GameScreen()));
   }
 
   /// _validateUsername validates a provided username [iusername] and returns the validated
