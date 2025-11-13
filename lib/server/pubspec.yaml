@@ -1,5 +1,5 @@
-name: my_server
-description: Server backend for MyApp
+name: connectticserver
+description: Server backend for ConnectTic
 environment:
   sdk: ^3.5.0
 

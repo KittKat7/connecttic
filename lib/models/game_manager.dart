@@ -39,7 +39,7 @@ class GameManager {
         response['status'] != 200) {
       callbackError();
     } else {
-      getGM.player1.playerId = "You"; // TODO
+      getGM.player1.playerId = "Player 1"; // TODO
       getGM.uHash = response['user'];
       getGM.gameId = response['hash'];
       getGM.hash = response['hash'];
@@ -64,7 +64,7 @@ class GameManager {
         response['status'] != 200) {
       callbackError();
     } else {
-      getGM.player2.playerId = "You"; // TODO
+      getGM.player2.playerId = "Player 2"; // TODO
       getGM.uHash = response['user'];
       getGM.gameId = response['hash'];
       getGM.hash = response['hash'];
@@ -74,13 +74,17 @@ class GameManager {
     return response;
   }
 
-  // TODO add a remote update call
+  /// Makes a reuqets to the server to get the current state of the game. If the
+  /// game has been marked as over, then the it returns without making the
+  /// request.
   static Future<void> remoteUpdate({bool repeat = true}) async {
+    // If the game is over, then dont bother with the request
     if (getGM.game.status == GameStatus.draw ||
         getGM.game.status == GameStatus.player1 ||
         getGM.game.status == GameStatus.player2) {
       return;
     }
+
     // If the game exists, and the status is playing or idle, init a 3 second
     // loop for getting
     if (gm != null &&
@@ -202,13 +206,11 @@ class GameManager {
 /// Makes a post request to the server. Takes [req] the request and the content
 /// [content] and returns a Future<Map> with the json data from the response.
 Future<Map> postData(String req, Map content) async {
-  print("DUBUG");
   // If the game is running in release mode, use the prod url, otherwise use
   // localhost
   final Uri uri = isRelease
       ? Uri.https('${ServerDefs.prodUrl}:${ServerDefs.prodPort}')
       : Uri.http('${ServerDefs.devUrl}:${ServerDefs.devPort}');
-  print("Connecting to server on: $uri");
 
   /// The json response to return
   Map responseJson = {};

@@ -50,7 +50,6 @@ class _GameScreenState extends State<GameScreen> {
         context: context,
         builder: (BuildContext context) => GameEndPopup(
               winnerUsername: winner,
-              time: "TODO",
             ));
   }
 
@@ -77,7 +76,6 @@ class _GameScreenState extends State<GameScreen> {
     GameManager.getGM.updateCallback = ([bool sound = false]) {
       if (sound) AppAudio.getInstance().playEffect(AppAudio.effectPop);
       setState(() {});
-      print("udated");
     };
 
     /// The lower row which is displayed below the board.

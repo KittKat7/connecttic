@@ -1,7 +1,7 @@
 // ignore: constant_identifier_names
 const Map<String, String> en_us = {
   // Title
-  "titleApp": "ConnectTic",
+  "titleApp": "ConnectTic 1.0",
   "titleModeSelect": "Select Gamemode",
   "titleHelp": "Help/Rules",
   "titleAbout": "About",
@@ -30,10 +30,11 @@ const Map<String, String> en_us = {
   "pmtGameCode": "Game Code",
   "pmtUserLocal": "You",
   "pmtUserConnected": "Connected",
+  "pmtNewRemoteGame": "Create a new remote game?",
   // Text
   "txtHelp": """
 ## How to play
-ConnectTic is a mashup of Tic-Tac-Toe and Connect 4. The goal of the game is to get 4 pieces
+ConnectTic is a mashup of Tic-Tac-Toe and Connect4. The goal of the game is to get 4 pieces
 connected in a row, column, or diagonal (similar to Connect 4). To accomplish this, you can play on
 any empty tile on the board (similar to Tic-Tac-Toe). There is a catch, you cannot play on any tile
 directly next to your last played piece. This twist makes the game much more challenging and
@@ -47,11 +48,11 @@ having the pieces fall from gravity). The concept was then developed and balance
 form, ConnectTic.
 
 ## Dev Team
-**Developer: KittKat**\\
+**Code Developer: KittKat**\\
 Website: [kittkat.xyz](https://kittkat.xyz)\\
 Support: [kittkat.xyz/support/](https://kittkat.xyz/support/)
 
-**Music: TODO**
+**Music: Artist**
 """,
   "txtGreeting": """
 Welcome to ConnectTic! This game is completely free. If you enjoy this game, please consider

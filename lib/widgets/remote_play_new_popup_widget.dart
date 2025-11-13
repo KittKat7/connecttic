@@ -25,7 +25,7 @@ class _RemotePlayNewPopupState extends State<RemotePlayNewPopup> {
         children: [
           Row(
             children: [
-              Text(getLang('pmtPlayer', [0 + 1])),
+              Text(getLang('pmtNewRemoteGame')),
             ],
           ),
         ],

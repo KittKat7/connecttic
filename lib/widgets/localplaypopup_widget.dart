@@ -63,16 +63,4 @@ class _LocalPlayPopupState extends State<LocalPlayPopup> {
     );
     Navigator.push(context, genRoute(const GameScreen()));
   }
-
-  /// _validateUsername validates a provided username [iusername] and returns the validated
-  /// username. This validation includes validating/censoring/cleaning and ensuring the username
-  /// does not extend past the max length.
-  /// TODO
-  // ignore: unused_element
-  String _validateUsername(String iusername) {
-    const int maxUsernameLength = 11;
-    return iusername.length > maxUsernameLength
-        ? iusername.substring(0, maxUsernameLength)
-        : iusername;
-  }
 }

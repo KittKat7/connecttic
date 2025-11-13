@@ -5,11 +5,9 @@ import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 class GameEndPopup extends StatelessWidget {
   /// String with the username of the winning player.
   final String winnerUsername;
-  final String time;
 
   /// Const constructor.
-  const GameEndPopup(
-      {super.key, required this.winnerUsername, required this.time});
+  const GameEndPopup({super.key, required this.winnerUsername});
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -19,7 +17,7 @@ class GameEndPopup extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(getLang('pmtWinner', [winnerUsername])),
-            Text(getLang('pmtTime', [time]))
+            // Text(getLang('pmtTime', [time])) // TODO add support for displaying game time
           ]),
       actions: [
         TextButton(

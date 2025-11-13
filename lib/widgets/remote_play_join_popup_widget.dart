@@ -19,6 +19,7 @@ class _RemotePlayJoinPopupState extends State<RemotePlayJoinPopup> {
   @override
   Widget build(BuildContext context) {
     String hash = "";
+    TextEditingController controller = TextEditingController();
     return AlertDialog(
       title: Text(getLang('titleSetupGame')),
       content: Column(
@@ -29,7 +30,12 @@ class _RemotePlayJoinPopupState extends State<RemotePlayJoinPopup> {
             children: [
               Expanded(
                 child: TextField(
-                  onChanged: (value) => hash = value,
+                  controller: controller,
+                  textCapitalization: TextCapitalization.characters,
+                  onChanged: (value) {
+                    hash = value.toUpperCase();
+                    controller.text = hash;
+                  },
                   decoration: InputDecoration(hintText: getLang('pmtGameCode')),
                 ),
               ),

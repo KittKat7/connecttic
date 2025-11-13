@@ -3,7 +3,7 @@ import 'package:just_audio/just_audio.dart';
 
 class AppAudio {
   static const String musicMenu = 'assets/music/CrateDigger - Artist.m4a';
-  static const String effectPop = 'assets/sound_effects/pop-tmp.mp3';
+  static const String effectPop = 'assets/sound_effects/pop.mp3';
 
   static AppAudio? _instance;
 
