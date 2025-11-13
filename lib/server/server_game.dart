@@ -5,7 +5,7 @@ import 'package:connecttic/models/player.dart';
 import 'package:connecttic/models/pos.dart';
 
 // ignore: constant_identifier_names
-const TIMEOUT_DURATION = Duration(seconds: 10);
+const TIMEOUT_DURATION = 5 * 60;
 
 class ServerGame {
   /// The games game manager
@@ -24,7 +24,8 @@ class ServerGame {
   void Function() timeoutCallback;
 
   /// Used to timeout the game after no activity
-  Timer timerout;
+  late Timer timerout;
+  int secondsLeft;
 
   /// Constructor
   /// Create [gm] as type [GameType.local] as it is local to the server.
@@ -36,20 +37,30 @@ class ServerGame {
   })  : gm = GameManager(GameType.local,
             player1: Player(level: PlayerLevel.player),
             player2: Player(level: PlayerLevel.player)),
-        timerout = Timer(
-          TIMEOUT_DURATION,
-          timeoutCallback,
-        );
+        secondsLeft = TIMEOUT_DURATION {
+    timerout =
+        Timer.periodic(const Duration(seconds: 1), (t) => updateTimeout());
+  }
+
+  void updateTimeout() {
+    if (secondsLeft <= 0) {
+      timeoutCallback();
+      return;
+    }
+
+    secondsLeft--;
+  }
 
   /// Handles plays for server games. Passes the position to the [GameManager]
   /// and resets the timeout clock [timerout]. Returns the response from calling
   /// `gm.play()`.
   bool play(Pos pos) {
     // Reset the timer
-    timerout = Timer(
-      TIMEOUT_DURATION,
-      timeoutCallback,
-    );
+    resetTime();
     return gm.play(pos);
+  }
+
+  void resetTime() {
+    secondsLeft = TIMEOUT_DURATION;
   }
 }

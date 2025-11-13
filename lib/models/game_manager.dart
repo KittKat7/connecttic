@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:connecttic/models/constants.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:connecttic/server/server_defs.dart';
@@ -38,7 +39,7 @@ class GameManager {
         response['status'] != 200) {
       callbackError();
     } else {
-      getGM.player1.playerId = 'local';
+      getGM.player1.playerId = "You"; // TODO
       getGM.uHash = response['user'];
       getGM.gameId = response['hash'];
       getGM.hash = response['hash'];
@@ -63,7 +64,7 @@ class GameManager {
         response['status'] != 200) {
       callbackError();
     } else {
-      getGM.player2.playerId = response['user'];
+      getGM.player2.playerId = "You"; // TODO
       getGM.uHash = response['user'];
       getGM.gameId = response['hash'];
       getGM.hash = response['hash'];
@@ -95,17 +96,26 @@ class GameManager {
         if (getGM.errorHandler != null) getGM.errorHandler!();
         return;
       } else {
+        // Check if is a difference between the new board from the server, and
+        // the local version. That will tell us if a new piece has been played,
+        // and if we need to play the update sound.
+        bool playSound = jsonEncode(Game.fromJson(response['game']).board) !=
+            jsonEncode(getGM.game.board);
+
+        // Update the game to the returned copy, and update timeout
         getGM.game = Game.fromJson(response['game']);
+        getGM.secondsLeft = response['tout'];
+        // Refresh the widgets, and play a sound if needed
+        getGM.callUpdateCallback(playSound);
       }
     }
-    getGM.callUpdateCallback();
     // Run the callback
     if (repeat) Timer(const Duration(seconds: 3), remoteUpdate);
   }
 
   Game game;
   GameType type;
-  void Function()? updateCallback;
+  void Function([bool sound])? updateCallback;
   int get width => game.board.length;
   int get height => game.board[0].length;
   int getItem(Pos pos) => game.board[pos.x][pos.y];
@@ -114,6 +124,7 @@ class GameManager {
   Player player1;
   Player player2;
   String? gameId;
+  int? secondsLeft;
   Function? errorHandler;
 
   // Remote specific vars
@@ -171,7 +182,7 @@ class GameManager {
     }
 
     if (played) {
-      callUpdateCallback();
+      callUpdateCallback(true);
     }
 
     return played;
@@ -179,9 +190,9 @@ class GameManager {
 
   /// Calls the updateCallback function if its not null, and returns true.
   /// Else returns false.
-  bool callUpdateCallback() {
+  bool callUpdateCallback([bool sound = false]) {
     if (updateCallback != null) {
-      updateCallback!();
+      updateCallback!(sound);
       return true;
     }
     return false;
@@ -194,10 +205,9 @@ Future<Map> postData(String req, Map content) async {
   // If the game is running in release mode, use the prod url, otherwise use
   // localhost
   // TODO FIX Platform.environment does not work on web
-/*   final url = Platform.environment['FLUTTER_ENV'] == 'release'
-      ? ''
-      : 'http://localhost:8080'; */
-  final url = 'http://localhost:8080';
+  final Uri uri = isRelease
+      ? Uri.https('${ServerDefs.prodUrl}:${ServerDefs.prodPort}')
+      : Uri.http('${ServerDefs.devUrl}:${ServerDefs.devPort}');
   // final httpClient = HttpClient();
 
   /// The json response to return
@@ -211,7 +221,7 @@ Future<Map> postData(String req, Map content) async {
     // request.write(jsonEncode(content));
 
     final response = await http.post(
-      Uri.http('localhost:8080'),
+      uri,
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode(content),
     );

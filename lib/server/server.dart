@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connecttic/models/constants.dart';
 import 'package:connecttic/server/server_defs.dart';
+import 'package:connecttic/server/server_game.dart';
 import 'package:connecttic/server/server_helpers.dart';
 
 import '../models/game.dart';
 import '../models/pos.dart';
-import 'server_game.dart';
 import 'server_game_list.dart';
 
 late ServerGameList gameList;
@@ -15,7 +16,10 @@ Future<void> main() async {
   gameList = ServerGameList();
 
   // Create a server that listens on localhost at port 8080
-  var server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8080);
+  var server = isRelease
+      ? await HttpServer.bindSecure(
+          ServerDefs.prodUrl, ServerDefs.prodPort, SecurityContext())
+      : await HttpServer.bind(ServerDefs.devUrl, ServerDefs.devPort);
   print('Serving at http://${server.address.host}:${server.port}');
 
   // Listen for incoming requests
@@ -108,8 +112,9 @@ Future<void> handleRequest(HttpRequest request) async {
 
         code = ServerDefs.codeSucc;
         Map<String, dynamic> messageObj = {
-          "hash": hash,
-          "game": sg.gm.game.toJson()
+          'hash': hash,
+          'game': sg.gm.game.toJson(),
+          'tout': sg.secondsLeft,
         };
         message = jsonEncode(messageObj);
 
@@ -139,6 +144,8 @@ Future<void> handleRequest(HttpRequest request) async {
         }
 
         sg.user2 = p2Hash;
+
+        sg.resetTime();
 
         sg.gm.game.player2Name = "Connected"; // TODO
         code = ServerDefs.codeSucc;
@@ -179,7 +186,7 @@ Future<void> handleRequest(HttpRequest request) async {
 
         if ((user == sg.user1 && sg.gm.currentPlayer == Game.p1) ||
             (user == sg.user2 && sg.gm.currentPlayer == Game.p2)) {
-          gameList.get(hash)!.gm.play(pos);
+          gameList.get(hash)!.play(pos);
         }
 
         code = ServerDefs.codeSucc;

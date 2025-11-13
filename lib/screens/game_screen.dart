@@ -67,15 +67,15 @@ class _GameScreenState extends State<GameScreen> {
     );
 
     var gameHeader = Text(
-      '${GameManager.getGM.type.name[0].toUpperCase() + GameManager.getGM.type.name.substring(1)}: ${GameManager.getGM.gameId ?? ''}',
+      '${GameManager.getGM.type.name[0].toUpperCase() + GameManager.getGM.type.name.substring(1)}: ${GameManager.getGM.gameId ?? ''}${GameManager.getGM.secondsLeft != null ? ' | Timeout: ${GameManager.getGM.secondsLeft}' : ''}',
       textScaler: const TextScaler.linear(2),
     );
 
     /// The widget which displays the current game board.
     var gameBoard = GameBoard(gameManager: GameManager.getGM);
 
-    GameManager.getGM.updateCallback = () {
-      AppAudio.getInstance().playEffect(AppAudio.effectPop);
+    GameManager.getGM.updateCallback = ([bool sound = false]) {
+      if (sound) AppAudio.getInstance().playEffect(AppAudio.effectPop);
       setState(() {});
       print("udated");
     };

@@ -14,10 +14,17 @@ class ServerDefs {
   static const String reqPlay = 'play';
 
   /// Requests to get the current game status, required data `{"hash": "HASH"}`
-  /// and returns `{"hash": "HASH", "game": GAME}`
+  /// and returns `{"hash": "HASH", "game": GAME, "tout": timeout_seconds}`
   static const String reqGet = 'get';
 
   static const int codeSucc = HttpStatus.ok;
   static const int codeAppErr = HttpStatus.badRequest;
   static const int codeUsrErr = HttpStatus.notFound;
+
+  // Addresses and ports for server
+  static const String devUrl = 'localhost';
+  static const int devPort = 8080;
+
+  static const String prodUrl = 'connecttic-server.kittkat.xyz';
+  static const int prodPort = 443;
 }
