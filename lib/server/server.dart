@@ -9,6 +9,7 @@ import '../server/server_helpers.dart';
 import '../models/game.dart';
 import '../models/pos.dart';
 import 'server_game_list.dart';
+import '.serverenv.dart' show serverport;
 
 late ServerGameList gameList;
 
@@ -19,7 +20,7 @@ Future<void> main() async {
 
   // Create a server that listens on localhost at port 8080
   var server = isRelease
-      ? await HttpServer.bind(InternetAddress.anyIPv4, ServerDefs.prodPort)
+      ? await HttpServer.bind(InternetAddress.anyIPv4, serverport)
       : await HttpServer.bind(ServerDefs.devUrl, ServerDefs.devPort);
   print('Serving at http://${server.address.host}:${server.port}');
 
@@ -74,6 +75,12 @@ Future<void> handleRequest(HttpRequest request) async {
     int code = 500;
     String message = '';
 
+    // If the request is null, or no request
+    if (!content.containsKey('req') || content['req'] == null) {
+      throw ReqError(ServerDefs.codeAppErr, '{"error": "No request"}');
+    }
+
+    // Get the request
     String req = content['req'];
 
     // Handle different requests

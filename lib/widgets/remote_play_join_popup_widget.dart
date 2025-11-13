@@ -53,26 +53,18 @@ class _RemotePlayJoinPopupState extends State<RemotePlayJoinPopup> {
   /// [_onConfirmBtnPress] runs when the confirm btn is pressed. This method pops the popup off the
   /// stack and pushed the [GameScreen] onto the stack.
   void _onConfirmBtnPress(BuildContext context, String hash) {
-    Navigator.pop(context);
-
     GameManager.gm = GameManager(
       GameType.local,
       player1: p1,
       player2: p2,
     );
-    GameManager.joinRemoteGame(hash,
-        () => Navigator.push(context, genRoute(const GameScreen())), () {});
-  }
-
-  /// _validateUsername validates a provided username [iusername] and returns the validated
-  /// username. This validation includes validating/censoring/cleaning and ensuring the username
-  /// does not extend past the max length.
-  /// TODO
-  // ignore: unused_element
-  String _validateUsername(String iusername) {
-    const int maxUsernameLength = 11;
-    return iusername.length > maxUsernameLength
-        ? iusername.substring(0, maxUsernameLength)
-        : iusername;
+    GameManager.joinRemoteGame(
+      hash,
+      () {
+        Navigator.pop(context);
+        Navigator.push(context, genRoute(const GameScreen()));
+      },
+      () {},
+    );
   }
 }

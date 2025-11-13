@@ -39,11 +39,15 @@ class GameManager {
         response['status'] != 200) {
       callbackError();
     } else {
+      print("HELLO WORLD!!!");
       getGM.player1.playerId = "You"; // TODO
       getGM.uHash = response['user'];
       getGM.gameId = response['hash'];
       getGM.hash = response['hash'];
+      print("callback");
+      print(jsonEncode(response));
       callbackSuccess();
+      print("update");
       remoteUpdate();
     }
     return response;
@@ -202,13 +206,13 @@ class GameManager {
 /// Makes a post request to the server. Takes [req] the request and the content
 /// [content] and returns a Future<Map> with the json data from the response.
 Future<Map> postData(String req, Map content) async {
+  print("DUBUG");
   // If the game is running in release mode, use the prod url, otherwise use
   // localhost
   // TODO FIX Platform.environment does not work on web
   final Uri uri = isRelease
-      ? Uri.http('${ServerDefs.prodUrl}:${ServerDefs.prodPort}')
+      ? Uri.https('${ServerDefs.prodUrl}:${ServerDefs.prodPort}')
       : Uri.http('${ServerDefs.devUrl}:${ServerDefs.devPort}');
-  // final httpClient = HttpClient();
 
   /// The json response to return
   Map responseJson = {};
@@ -244,9 +248,10 @@ Future<Map> postData(String req, Map content) async {
     responseJson = jsonDecode(responseBody) ?? {};
     responseJson['status'] = response.statusCode;
     // print(responseJson);
-  } catch (e) {
+  } catch (e, st) {
     // If there is an error, print the error and return it
     print('Error: $e');
+    print(st);
     responseJson = {'error': e};
   } // Return the responseJson
   return responseJson;
