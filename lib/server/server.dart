@@ -28,13 +28,31 @@ Future<void> main() async {
 // Function to handle incoming requests
 Future<void> handleRequest(HttpRequest request) async {
   try {
+    // SET CORS SO BROWSERS WILL WORK
+    // Set CORS headers
+    request.response.headers
+        .add('Access-Control-Allow-Origin', '*'); // Allow all origins
+    request.response.headers.add('Access-Control-Allow-Methods',
+        'GET, POST, OPTIONS'); // Allowed methods
+    request.response.headers
+        .add('Access-Control-Allow-Headers', 'Content-Type'); // Allowed
     // Set the response content type
     request.response.headers.contentType = ContentType.json;
 
+    // (CORS) Handle preflight request
+    if (request.method == 'OPTIONS') {
+      // Respond to preflight request
+      request.response.statusCode = HttpStatus.noContent; // 204 No Content
+      await request.response.close();
+      return; // Exit the function after handling the OPTIONS request
+    }
+
+    // If the method is not a post, idk what it is, return error
     if (request.method != 'POST') {
       ReqError(HttpStatus.methodNotAllowed, '{"error": "Method not allowed"}');
     }
 
+    // From now on, the method will be a POST
     String contentStr = await utf8.decoder.bind(request).join();
     Map content = {};
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
-// import 'dart:io';
 import 'dart:async';
-import 'dart:io';
+
+import 'package:http/http.dart' as http;
 
 import 'package:connecttic/server/server_defs.dart';
 
@@ -38,7 +38,7 @@ class GameManager {
         response['status'] != 200) {
       callbackError();
     } else {
-      getGM.player1.playerId = response['user'];
+      getGM.player1.playerId = 'local';
       getGM.uHash = response['user'];
       getGM.gameId = response['hash'];
       getGM.hash = response['hash'];
@@ -75,7 +75,6 @@ class GameManager {
 
   // TODO add a remote update call
   static Future<void> remoteUpdate({bool repeat = true}) async {
-    print("Hello!!");
     if (getGM.game.status == GameStatus.draw ||
         getGM.game.status == GameStatus.player1 ||
         getGM.game.status == GameStatus.player2) {
@@ -93,6 +92,8 @@ class GameManager {
         // TODO error
         // TODO Add a error popup widget?
         print("ERROR");
+        if (getGM.errorHandler != null) getGM.errorHandler!();
+        return;
       } else {
         getGM.game = Game.fromJson(response['game']);
       }
@@ -113,6 +114,7 @@ class GameManager {
   Player player1;
   Player player2;
   String? gameId;
+  Function? errorHandler;
 
   // Remote specific vars
   /// The hash for the remote game
@@ -192,27 +194,32 @@ Future<Map> postData(String req, Map content) async {
   // If the game is running in release mode, use the prod url, otherwise use
   // localhost
   // TODO FIX Platform.environment does not work on web
-  final url = Platform.environment['FLUTTER_ENV'] == 'release'
+/*   final url = Platform.environment['FLUTTER_ENV'] == 'release'
       ? ''
-      : 'http://localhost:8080';
-  // final url = 'http://localhost:8080';
-  final httpClient = HttpClient();
+      : 'http://localhost:8080'; */
+  final url = 'http://localhost:8080';
+  // final httpClient = HttpClient();
 
   /// The json response to return
   Map responseJson = {};
 
   try {
     // Run the request
-    final request = await httpClient.postUrl(Uri.parse(url));
-    request.headers.set('Content-Type', 'application/json; charset=UTF-8');
+    // final request = await httpClient.postUrl(Uri.parse(url));
+    // request.headers.set();
     content['req'] = req;
-    request.write(jsonEncode(content));
+    // request.write(jsonEncode(content));
+
+    final response = await http.post(
+      Uri.http('localhost:8080'),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+      body: jsonEncode(content),
+    );
 
     // Get the response
-    final response = await request.close();
+    // final response = await request.close();
 
-    String responseBody = await response.transform(utf8.decoder).join();
-    ;
+    String responseBody = response.body;
 
     // Good response
     if (response.statusCode == 200) {
@@ -231,9 +238,6 @@ Future<Map> postData(String req, Map content) async {
     // If there is an error, print the error and return it
     print('Error: $e');
     responseJson = {'error': e};
-  } finally {
-    httpClient.close();
-  }
-  // Return the responseJson
+  } // Return the responseJson
   return responseJson;
 }

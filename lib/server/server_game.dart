@@ -5,7 +5,7 @@ import 'package:connecttic/models/player.dart';
 import 'package:connecttic/models/pos.dart';
 
 // ignore: constant_identifier_names
-const TIMEOUT_DURATION = Duration(minutes: 2);
+const TIMEOUT_DURATION = Duration(seconds: 10);
 
 class ServerGame {
   /// The games game manager

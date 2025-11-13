@@ -1,4 +1,5 @@
 import 'package:connecttic/models/game_manager.dart';
+import 'package:connecttic/widgets/error_popup.dart';
 import 'package:connecttic/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
@@ -21,6 +22,9 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
     super.initState();
+    GameManager.getGM.errorHandler = () => showDialog(
+        context: context,
+        builder: (BuildContext context) => const ErrorPopup());
   }
 
   @override

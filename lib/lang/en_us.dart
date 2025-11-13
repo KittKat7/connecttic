@@ -28,6 +28,8 @@ const Map<String, String> en_us = {
   "pmtCpuLvl0": "User",
   "pmtCpuLvl1": "Computer Easy",
   "pmtGameCode": "Game Code",
+  "pmtUserLocal": "You",
+  "pmtUserConnected": "Connected",
   // Text
   "txtHelp": """
 ## How to play
