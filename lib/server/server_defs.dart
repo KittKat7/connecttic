@@ -26,5 +26,5 @@ class ServerDefs {
   static const int devPort = 8080;
 
   static const String prodUrl = 'connecttic-server.kittkat.xyz';
-  static const int prodPort = 8080;
+  static const int prodPort = 80;
 }

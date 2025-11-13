@@ -19,8 +19,7 @@ Future<void> main() async {
 
   // Create a server that listens on localhost at port 8080
   var server = isRelease
-      ? await HttpServer.bindSecure(
-          InternetAddress.anyIPv4, ServerDefs.prodPort, SecurityContext())
+      ? await HttpServer.bind(InternetAddress.anyIPv4, ServerDefs.prodPort)
       : await HttpServer.bind(ServerDefs.devUrl, ServerDefs.devPort);
   print('Serving at http://${server.address.host}:${server.port}');
 

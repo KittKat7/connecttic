@@ -206,7 +206,7 @@ Future<Map> postData(String req, Map content) async {
   // localhost
   // TODO FIX Platform.environment does not work on web
   final Uri uri = isRelease
-      ? Uri.https('${ServerDefs.prodUrl}:${ServerDefs.prodPort}')
+      ? Uri.http('${ServerDefs.prodUrl}:${ServerDefs.prodPort}')
       : Uri.http('${ServerDefs.devUrl}:${ServerDefs.devPort}');
   // final httpClient = HttpClient();
 
