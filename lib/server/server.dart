@@ -83,6 +83,9 @@ Future<void> handleRequest(HttpRequest request) async {
     // Get the request
     String req = content['req'];
 
+    // For the server, log the request into the console
+    print('Request: $req');
+
     // Handle different requests
     switch (req) {
       // COFFEE

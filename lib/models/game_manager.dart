@@ -39,15 +39,11 @@ class GameManager {
         response['status'] != 200) {
       callbackError();
     } else {
-      print("HELLO WORLD!!!");
       getGM.player1.playerId = "You"; // TODO
       getGM.uHash = response['user'];
       getGM.gameId = response['hash'];
       getGM.hash = response['hash'];
-      print("callback");
-      print(jsonEncode(response));
       callbackSuccess();
-      print("update");
       remoteUpdate();
     }
     return response;
@@ -209,10 +205,10 @@ Future<Map> postData(String req, Map content) async {
   print("DUBUG");
   // If the game is running in release mode, use the prod url, otherwise use
   // localhost
-  // TODO FIX Platform.environment does not work on web
   final Uri uri = isRelease
       ? Uri.https('${ServerDefs.prodUrl}:${ServerDefs.prodPort}')
       : Uri.http('${ServerDefs.devUrl}:${ServerDefs.devPort}');
+  print("Connecting to server on: $uri");
 
   /// The json response to return
   Map responseJson = {};
