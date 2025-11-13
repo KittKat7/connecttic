@@ -1,7 +1,7 @@
-import 'package:connecttic/models/audio_player.dart';
-import 'package:connecttic/widgets/audio_mute_button.dart';
-import 'package:connecttic/widgets/button_widget.dart';
-import 'package:connecttic/widgets/greeting_popup_widget.dart';
+import '/models/audio_player.dart';
+import '/widgets/audio_mute_button.dart';
+import '/widgets/button_widget.dart';
+import '/widgets/greeting_popup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 

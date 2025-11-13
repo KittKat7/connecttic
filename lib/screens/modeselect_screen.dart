@@ -1,5 +1,5 @@
-import 'package:connecttic/widgets/localplaypopup_widget.dart';
-import 'package:connecttic/widgets/remote_play_new_popup_widget.dart';
+import '/widgets/localplaypopup_widget.dart';
+import '/widgets/remote_play_new_popup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 

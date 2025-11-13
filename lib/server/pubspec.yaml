@@ -1,0 +1,11 @@
+name: my_server
+description: Server backend for MyApp
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  http: ^1.2.0
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.25.0

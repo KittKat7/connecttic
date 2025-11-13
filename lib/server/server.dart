@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:connecttic/models/constants.dart';
-import 'package:connecttic/server/server_defs.dart';
-import 'package:connecttic/server/server_game.dart';
-import 'package:connecttic/server/server_helpers.dart';
+import '../models/constants.dart';
+import '../server/server_defs.dart';
+import '../server/server_game.dart';
+import '../server/server_helpers.dart';
 
 import '../models/game.dart';
 import '../models/pos.dart';
@@ -13,12 +13,14 @@ import 'server_game_list.dart';
 late ServerGameList gameList;
 
 Future<void> main() async {
+  print('Starting server...');
+  print('Running in release mode: $isRelease');
   gameList = ServerGameList();
 
   // Create a server that listens on localhost at port 8080
   var server = isRelease
       ? await HttpServer.bindSecure(
-          ServerDefs.prodUrl, ServerDefs.prodPort, SecurityContext())
+          InternetAddress.anyIPv4, ServerDefs.prodPort, SecurityContext())
       : await HttpServer.bind(ServerDefs.devUrl, ServerDefs.devPort);
   print('Serving at http://${server.address.host}:${server.port}');
 

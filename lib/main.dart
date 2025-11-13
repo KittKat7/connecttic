@@ -1,8 +1,8 @@
-import 'package:connecttic/screens/home_screen.dart';
+import '/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 
-import 'package:connecttic/lang/en_us.dart' as en_us;
+import '/lang/en_us.dart' as en_us;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

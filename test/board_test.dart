@@ -1,7 +1,7 @@
-import 'package:connecttic/lang/en_us.dart' as en_us;
-import 'package:connecttic/models/board.dart';
-import 'package:connecttic/models/game.dart';
-import 'package:connecttic/models/player.dart';
+import '/lang/en_us.dart' as en_us;
+import '/models/board.dart';
+import '/models/game.dart';
+import '/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kittkatflutterlibrary/lang/kkfl_lang.dart';

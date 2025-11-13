@@ -1,4 +1,4 @@
-import 'package:connecttic/screens/about_screen.dart';
+import '/screens/about_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 

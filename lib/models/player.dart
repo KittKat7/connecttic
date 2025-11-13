@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:connecttic/models/game.dart';
+import './game.dart';
 
 import 'game_manager.dart';
 import 'pos.dart';

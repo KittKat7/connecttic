@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:connecttic/models/game_manager.dart';
-import 'package:connecttic/models/player.dart';
-import 'package:connecttic/models/pos.dart';
+import '../models/game_manager.dart';
+import '../models/player.dart';
+import '../models/pos.dart';
 
 // ignore: constant_identifier_names
 const TIMEOUT_DURATION = 5 * 60;

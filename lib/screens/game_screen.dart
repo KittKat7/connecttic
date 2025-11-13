@@ -1,6 +1,6 @@
-import 'package:connecttic/models/game_manager.dart';
-import 'package:connecttic/widgets/error_popup.dart';
-import 'package:connecttic/widgets/gameednpopup_widget.dart';
+import '/models/game_manager.dart';
+import '/widgets/error_popup.dart';
+import '/widgets/gameednpopup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:kittkatflutterlibrary/kittkatflutterlibrary.dart';
 

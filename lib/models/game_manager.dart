@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:connecttic/models/constants.dart';
+import './constants.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:connecttic/server/server_defs.dart';
+import '../server/server_defs.dart';
 
 import 'player.dart';
 import 'game.dart';
