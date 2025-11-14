@@ -34,7 +34,6 @@ class _RemotePlayJoinPopupState extends State<RemotePlayJoinPopup> {
                   textCapitalization: TextCapitalization.characters,
                   onChanged: (value) {
                     hash = value.toUpperCase();
-                    controller.text = hash;
                   },
                   decoration: InputDecoration(hintText: getLang('pmtGameCode')),
                 ),
